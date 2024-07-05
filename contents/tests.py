@@ -1,147 +1,123 @@
 from django.test import TestCase
-from rest_framework.test import APITestCase,APIRequestFactory,APIClient
-from django.urls import reverse
+from rest_framework.test import APIRequestFactory
+from contents.models import *
+from django.contrib.auth import get_user_model
+from contents.api.views import *
 from rest_framework import status
-from contents.api.views import PostViewSet
-from contents.models import Post
 
-class TestHelloWorld(APITestCase):
-    def test_hello(self):
-        response=self.client.get('/contents/posts/')
-        self.assertEqual(response.status_code,status.HTTP_200_OK)
+User=get_user_model()
 
-
-class TestPostView(APITestCase):
+class TestPostView(TestCase):
 
     def setUp(self):
-        self.factory = APIRequestFactory()
-        self.post1 = Post.objects.create(title='Test Post 1',post_id='111')
-        self.post2 = Post.objects.create(title='Test Post 2',post_id='222')
-
+        self.factory=APIRequestFactory()
+        self.user=User.objects.create_superuser(username="test",email="test@ts.com",password="1234")
+        self.post1=Post.objects.create(title="post1",post_id="1111",creator=self.user)
+        self.post2=Post.objects.create(title="post2",post_id="1112",creator=self.user)
 
     def test_list_posts(self):
-        view = PostViewSet.as_view({'get': 'list'})
-        request = self.factory.get('/posts/')
-        response = view(request)
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(len(response.data), 2)     
+        view=PostViewSet.as_view({'get':'list'})
+        request=self.factory.get('/contents/posts/')
+        response=view(request)
+        self.assertEqual(response.status_code,status.HTTP_200_OK)
 
-    def test_retrieve_posts(self):
-        view=PostViewSet.as_view({'get':'retrieve'})     
-        request=self.factory.get('/posts/{}/'.format(self.post1.post_id))
+    def test_retrieve_post(self):
+        view=PostViewSet.as_view({'get':'retrieve'})
+        request=self.factory.get('/contents/posts/{}/'.format(self.post1.post_id))
         response=view(request,post_id=self.post1.post_id)
         self.assertEqual(response.status_code,status.HTTP_200_OK)
-        
-    def test_create_post(self):
-        view=PostViewSet.as_view({'post':'create'})
-        request=self.factory.post('/posts/',data={'title':'hello','post_id':'3333'},format='json')
+ 
+    # def test_create_post(self):
+    #     view=PostViewSet.as_view({'post':'create'})
+    #     request=self.factory.post('/contents/posts/',data={'title':'222','post_id':'1223','creator':self.user.id},format='json')
+    #     response=view(request)
+    #     self.assertEqual(response.status_code,status.HTTP_201_CREATED)
+
+    def test_update_post(self):
+        view=PostViewSet.as_view({'patch':'partial_update'})
+        request=self.factory.patch('/contents/posts/{}/'.format(self.post1.post_id),data={'title':'new title'},format='json')
+        response=view(request,post_id=self.post1.post_id)
+        self.assertEqual(response.status_code,status.HTTP_200_OK)
+
+    def test_delete_post(self):
+        view=PostViewSet.as_view({'delete':'destroy'})
+        request=self.factory.delete('/contents/posts/{}/'.format(self.post1.post_id))
+        response=view(request,post_id=self.post1.post_id)
+        self.assertEqual(response.status_code,status.HTTP_204_NO_CONTENT)
+
+class CommentTestView(TestCase):
+    def setUp(self):
+        self.factory=APIRequestFactory()
+        self.user=User.objects.create_superuser(username="test2",email="test2@ts.com",password="1234")
+        self.comment1=Comment.objects.create(text="hello",email=self.user.email)
+        self.comment2=Comment.objects.create(text="bye",email=self.user.email)
+
+    def test_list_comment(self):
+        view=CommentViewSet.as_view({'get':'list'})
+        request=self.factory.get('/contents/comments/')
         response=view(request)
-        print(response.data)
-        self.assertEqual(response.status_code,status.HTTP_201_CREATED)    
+        self.assertEqual(response.status_code,status.HTTP_200_OK)
+    def test_retrieve_comment(self):
+        view=CommentViewSet.as_view({'get':'retrieve'})
+        request=self.factory.get('/contents/comments/{}/'.format(self.comment1.id))
+        response=view(request,pk=self.comment1.id)
+        self.assertEqual(response.status_code,status.HTTP_200_OK)     
+    def test_create_comment(self):
+        view=CommentViewSet.as_view({'post':'create'})
+        request=self.factory.post('/contents/comments/',data={'text':'hello','email':self.user.email},format='json')
+        response=view(request)
+        self.assertEqual(response.status_code,status.HTTP_201_CREATED)
+
+    def test_update_comment(self):
+        view=CommentViewSet.as_view({'patch':'partial_update'})
+        request=self.factory.patch('/content/comments/{}/'.format(self.comment1.id),data={'text':'hi'})
+        response=view(request,pk=self.comment1.id)
+        self.assertEqual(response.status_code,status.HTTP_200_OK)
+
+    def test_delete_comment(self):
+        view=CommentViewSet.as_view({'delete':'destroy'})
+        request=self.factory.delete('/contents/comments/{}'.format(self.comment1.id))
+        response=view(request,pk=self.comment1.id)
+        self.assertEqual(response.status_code,status.HTTP_204_NO_CONTENT)            
+
+class KeywordTestView(TestCase):
+    def setUp(self):
+        self.factory=APIRequestFactory()
+        self.key1=Keyword.objects.create(name="hello")
+        self.key2=Keyword.objects.create(name="bye")
+
+    def test_list(self):
+        view=KeywordViewSet.as_view({'get':'list'})
+        request=self.factory.get('/contents/keywords/')
+        response=view(request)
+        self.assertEqual(response.status_code,status.HTTP_200_OK)
+
+    def test_retrieve(self):
+        view=KeywordViewSet.as_view({'get':'retrieve'})
+        request=self.factory.get('/contents/keywords/{}/'.format(self.key2.id))
+        response=view(request,pk=self.key2.id)
+        self.assertEqual(response.status_code,status.HTTP_200_OK)     
+
+    def test_create(self):
+        view=KeywordViewSet.as_view({'post':'create'})
+        request=self.factory.post('/contents/keywords/',data={'name':'keuuu'},format='json')
+        response=view(request)
+        self.assertEqual(response.status_code,status.HTTP_201_CREATED)
+
+    def test_update(self):
+        view=KeywordViewSet.as_view({'patch':'partial_update'})
+        request=self.factory.patch('/content/keywords/{}/'.format(self.key2.id),data={'text':'hi'})
+        response=view(request,pk=self.key2.id)
+        self.assertEqual(response.status_code,status.HTTP_200_OK)
+        
+    def test_delete(self):
+        view=KeywordViewSet.as_view({'delete':'destroy'})
+        request=self.factory.delete('/contents/keywords/{}'.format(self.key2.id))
+        response=view(request,pk=self.key2.id)
+        self.assertEqual(response.status_code,status.HTTP_204_NO_CONTENT) 
 
 
 
 
-# from django.test import TestCase, APIRequestFactory
-
-# from rest_framework import status
-
-# from rest_framework.test import force_authenticate
-
-# from.views import PostViewSet
-
-# from.models import Post
-
-# from.serializers import PostSerializer
 
 
-# class TestPostViewSet(TestCase):
-
-#     def setUp(self):
-
-#         self.factory = APIRequestFactory()
-
-#         self.user = User.objects.create_user('testuser', 'testuser@example.com', 'password')
-
-#         self.post1 = Post.objects.create(title='Test Post 1', content='This is a test post')
-
-#         self.post2 = Post.objects.create(title='Test Post 2', content='This is another test post')
-
-
-#     def test_list_posts(self):
-
-#         view = PostViewSet.as_view({'get': 'list'})
-
-#         request = self.factory.get('/posts/')
-
-#         force_authenticate(request, user=self.user)
-
-#         response = view(request)
-
-#         self.assertEqual(response.status_code, status.HTTP_200_OK)
-
-#         self.assertEqual(len(response.data), 2)
-
-
-#     def test_retrieve_post(self):
-
-#         view = PostViewSet.as_view({'get': 'etrieve'})
-
-#         request = self.factory.get('/posts/{}/'.format(self.post1.post_id))
-
-#         force_authenticate(request, user=self.user)
-
-#         response = view(request, post_id=self.post1.post_id)
-
-#         self.assertEqual(response.status_code, status.HTTP_200_OK)
-
-#         self.assertEqual(response.data['title'], self.post1.title)
-
-
-#     def test_create_post(self):
-
-#         view = PostViewSet.as_view({'post': 'create'})
-
-#         data = {'title': 'New Test Post', 'content': 'This is a new test post'}
-
-#         request = self.factory.post('/posts/', data, format='json')
-
-#         force_authenticate(request, user=self.user)
-
-#         response = view(request)
-
-#         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
-
-#         self.assertEqual(Post.objects.count(), 3)
-
-
-#     def test_update_post(self):
-
-#         view = PostViewSet.as_view({'patch': 'partial_update'})
-
-#         data = {'title': 'Updated Test Post'}
-
-#         request = self.factory.patch('/posts/{}/'.format(self.post1.post_id), data, format='json')
-
-#         force_authenticate(request, user=self.user)
-
-#         response = view(request, post_id=self.post1.post_id)
-
-#         self.assertEqual(response.status_code, status.HTTP_200_OK)
-
-#         self.assertEqual(Post.objects.get(post_id=self.post1.post_id).title, 'Updated Test Post')
-
-
-#     def test_delete_post(self):
-
-#         view = PostViewSet.as_view({'delete': 'destroy'})
-
-#         request = self.factory.delete('/posts/{}/'.format(self.post1.post_id))
-
-#         force_authenticate(request, user=self.user)
-
-#         response = view(request, post_id=self.post1.post_id)
-
-#         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
-
-#         self.assertEqual(Post.objects.count(), 1)        

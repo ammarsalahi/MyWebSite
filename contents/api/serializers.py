@@ -9,10 +9,6 @@ class CommentSerializer(serializers.ModelSerializer):
         model=Comment
         fields="__all__"      
 
-class InteractionSerializer(serializers.ModelSerializer):
-    class Meta:
-        model=Interaction
-        fields="__all__"  
 
 class KeywordSerializer(serializers.ModelSerializer):
     class Meta:

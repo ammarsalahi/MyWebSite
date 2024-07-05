@@ -20,23 +20,23 @@ class Post(GeneralModel):
     creator=models.ForeignKey(
         'accounts.User',
         on_delete=models.CASCADE,
-        null=True,
-        blank=True
+    )
+    view_count=models.IntegerField(
+        default=0,
+        verbose_name='بازدید'
     )
     comments=models.ManyToManyField(
         'contents.Comment',
         related_name='comments_post',
-        blank=True
+        blank=True,
+        verbose_name='نظرات'
     )
-    actions=models.ManyToManyField(
-        'contents.Interaction',
-        related_name='actions_post',
-        blank=True
-    )
+
     keywords=models.ManyToManyField(
         'contents.Keyword',
         related_name="keyword_posts",
-        blank=True
+        blank=True,
+        verbose_name='کلمات کلیدی'
     )
 
     def __str__(self):

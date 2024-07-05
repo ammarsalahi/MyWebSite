@@ -7,10 +7,12 @@ class Comment(GeneralModel):
       verbose_name="متن",
       max_length=500
     )
-    user=models.ForeignKey(
-        'accounts.User',
-        on_delete=models.CASCADE,
-        verbose_name="کاربر"
+    email=models.EmailField(
+        verbose_name="ایمیل"
+    )
+    is_verified=models.BooleanField(
+        default=False,
+        verbose_name="تایید شده"
     )
     def __str__(self):
         return self.action
