@@ -1,6 +1,7 @@
 from .serializers import *
 from contents.models import *
 from rest_framework.viewsets import ModelViewSet
+from rest_framework.generics import ListAPIView
 from django.utils.crypto import get_random_string
 
 
@@ -19,7 +20,12 @@ class PostViewSet(ModelViewSet):
         data._mutable=False
         return super().create(self,request,*args,**kwargs)
 
+class NewPostsListView(ListAPIView):
+    queryset=Post.objects.all()[:8]
+    serializer_class=PostSerializer
+    lookup_field="post_id"
 
+    
 class CommentViewSet(ModelViewSet):
    queryset=Comment.objects.all().order_by('-created_at')     
    serializer_class=CommentSerializer

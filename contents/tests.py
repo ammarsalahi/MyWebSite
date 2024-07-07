@@ -14,6 +14,13 @@ class TestPostView(TestCase):
         self.user=User.objects.create_superuser(username="test",email="test@ts.com",password="1234")
         self.post1=Post.objects.create(title="post1",post_id="1111",creator=self.user)
         self.post2=Post.objects.create(title="post2",post_id="1112",creator=self.user)
+        self.post3=Post.objects.create(title="post3",post_id="11113",creator=self.user)
+        self.post4=Post.objects.create(title="post22",post_id="11122",creator=self.user)
+        self.post5=Post.objects.create(title="post11",post_id="111133",creator=self.user)
+        # self.post6=Post.objects.create(title="post23",post_id="111222",creator=self.user)
+        # self.post7=Post.objects.create(title="post21",post_id="11113342",creator=self.user)
+        # self.post8=Post.objects.create(title="post234",post_id="11123313",creator=self.user)
+        # self.post9=Post.objects.create(title="post14",post_id="11111224",creator=self.user)
 
     def test_list_posts(self):
         view=PostViewSet.as_view({'get':'list'})
@@ -26,7 +33,13 @@ class TestPostView(TestCase):
         request=self.factory.get('/contents/posts/{}/'.format(self.post1.post_id))
         response=view(request,post_id=self.post1.post_id)
         self.assertEqual(response.status_code,status.HTTP_200_OK)
- 
+    
+    def test_limit_list(self):
+        view=NewPostsListView.as_view()
+        request=self.factory.get('/contents/list-posts/')
+        response=view(request)
+        self.assertEqual(response.status_code,status.HTTP_200_OK)
+        
     # def test_create_post(self):
     #     view=PostViewSet.as_view({'post':'create'})
     #     request=self.factory.post('/contents/posts/',data={'title':'222','post_id':'1223','creator':self.user.id},format='json')
