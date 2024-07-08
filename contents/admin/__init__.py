@@ -6,6 +6,6 @@ from .keyword import KeywordAdmin
 
 
 
-admin.site.register(Post,PostAdmin)
-admin.site.register(Comment,CommentAdmin)
-admin.site.register(Keyword,KeywordAdmin)
+# admin.site.register(Post,PostAdmin)
+# admin.site.register(Comment,CommentAdmin)
+# admin.site.register(Keyword,KeywordAdmin)

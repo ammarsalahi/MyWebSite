@@ -49,6 +49,9 @@ class Post(GeneralModel):
         default=True,
         verbose_name="فعال بودن"
     )
+    class Meta:
+        verbose_name="پست"
+        verbose_name_plural="پست‌ها"
     def __str__(self):
         return self.title
 

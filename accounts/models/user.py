@@ -27,8 +27,12 @@ class User(AbstractBaseUser):
         unique=True
     )
 
-
-    
+    profile_image=models.ImageField(
+        upload_to="users/photo/",
+        verbose_name="تصویر پروفایل",
+        null=True,
+        blank=True
+    )
     is_superuser = models.BooleanField(
         default=False
     )
