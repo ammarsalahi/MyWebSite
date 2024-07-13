@@ -1,7 +1,7 @@
 from utils.general_model import GeneralModel
 from django.db import models
-from django_ckeditor_5.fields import CKEditor5Field
 from django.utils.crypto import get_random_string
+from froala_editor.fields import FroalaField
 
 class Post(GeneralModel):
     post_id=models.CharField(
@@ -19,10 +19,12 @@ class Post(GeneralModel):
         upload_to="posts/headers/",
         verbose_name="تصویر"
     )
-    text=CKEditor5Field(
-        'Text', 
-        config_name='extends'
+    text= FroalaField(
+        verbose_name="متن",
+        null=True,
+        blank=True
     )
+    
 
     creator=models.ForeignKey(
         'accounts.User',

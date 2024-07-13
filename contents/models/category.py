@@ -12,4 +12,4 @@ class Category(GeneralModel):
         verbose_name_plural="دسته‌بندی‌ها"
 
     def __str__(self):
-        self.name    
+        return self.name    

@@ -11,11 +11,11 @@ class UserAbout(GeneralModel):
         verbose_name="توضیحات"
     )
     skill=models.CharField(
-        verbose_name="",
+        verbose_name="مهارت",
         max_length=200
     )
     university_name=models.CharField(
-        verbose_name="",
+        verbose_name="نام دانشگاه",
         max_length=300,
     )
     university_web=models.URLField(
@@ -26,7 +26,7 @@ class UserAbout(GeneralModel):
     socials=models.ManyToManyField(
         'accounts.Social',
         related_name='user_socials',
-        verbose_name=""
+        verbose_name="حساب‌های اجتماعی"
     )
 
     class Meta:

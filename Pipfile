@@ -8,6 +8,8 @@ django = "==4.2"
 djangorestframework = "*"
 django-ckeditor = "*"
 pillow = "*"
+django-ckeditor-5 = "*"
+django-froala-editor = "*"
 
 [dev-packages]
 
