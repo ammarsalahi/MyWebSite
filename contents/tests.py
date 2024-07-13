@@ -58,40 +58,7 @@ class TestPostView(TestCase):
         response=view(request,post_id=self.post1.post_id)
         self.assertEqual(response.status_code,status.HTTP_204_NO_CONTENT)
 
-class CommentTestView(TestCase):
-    def setUp(self):
-        self.factory=APIRequestFactory()
-        self.user=User.objects.create_superuser(username="test2",email="test2@ts.com",password="1234")
-        self.comment1=Comment.objects.create(text="hello",email=self.user.email)
-        self.comment2=Comment.objects.create(text="bye",email=self.user.email)
-
-    def test_list_comment(self):
-        view=CommentViewSet.as_view({'get':'list'})
-        request=self.factory.get('/contents/comments/')
-        response=view(request)
-        self.assertEqual(response.status_code,status.HTTP_200_OK)
-    def test_retrieve_comment(self):
-        view=CommentViewSet.as_view({'get':'retrieve'})
-        request=self.factory.get('/contents/comments/{}/'.format(self.comment1.id))
-        response=view(request,pk=self.comment1.id)
-        self.assertEqual(response.status_code,status.HTTP_200_OK)     
-    def test_create_comment(self):
-        view=CommentViewSet.as_view({'post':'create'})
-        request=self.factory.post('/contents/comments/',data={'text':'hello','email':self.user.email},format='json')
-        response=view(request)
-        self.assertEqual(response.status_code,status.HTTP_201_CREATED)
-
-    def test_update_comment(self):
-        view=CommentViewSet.as_view({'patch':'partial_update'})
-        request=self.factory.patch('/content/comments/{}/'.format(self.comment1.id),data={'text':'hi'})
-        response=view(request,pk=self.comment1.id)
-        self.assertEqual(response.status_code,status.HTTP_200_OK)
-
-    def test_delete_comment(self):
-        view=CommentViewSet.as_view({'delete':'destroy'})
-        request=self.factory.delete('/contents/comments/{}'.format(self.comment1.id))
-        response=view(request,pk=self.comment1.id)
-        self.assertEqual(response.status_code,status.HTTP_204_NO_CONTENT)            
+          
 
 class KeywordTestView(TestCase):
     def setUp(self):
@@ -128,6 +95,15 @@ class KeywordTestView(TestCase):
         request=self.factory.delete('/contents/keywords/{}'.format(self.key2.id))
         response=view(request,pk=self.key2.id)
         self.assertEqual(response.status_code,status.HTTP_204_NO_CONTENT) 
+
+
+# class CategoryTestView(TestCase):
+#     def setUp(self):
+#         self.factory=APIRequestFactory()
+#         self.cat1=Category.objects.create(name="cat1")
+#         self.cat2=Category.objects.create(name="cat2")
+
+#     def test_list_category()    
 
 
 

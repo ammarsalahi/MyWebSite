@@ -4,10 +4,6 @@ from contents.models import *
 
 
 
-class CommentSerializer(serializers.ModelSerializer):
-    class Meta:
-        model=Comment
-        fields="__all__"      
 
 
 class KeywordSerializer(serializers.ModelSerializer):
@@ -15,6 +11,11 @@ class KeywordSerializer(serializers.ModelSerializer):
         model=Keyword
         fields="__all__"  
 
+
+class CategorySerializer(serializers.ModelSerializer):
+    class Meta:
+        model=Category
+        fields="__all__"
 class PostSerializer(serializers.ModelSerializer):
     # keywords=KeywordSerializer()
     # comments=CommentSerializer()
@@ -25,4 +26,5 @@ class PostSerializer(serializers.ModelSerializer):
         fields="__all__"
     def to_representation(self,instance):
         data = super(PostSerializer, self).to_representation(instance)
+        
         return data

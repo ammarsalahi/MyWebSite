@@ -5,8 +5,11 @@ name = "pypi"
 
 [packages]
 django = "==4.2"
+djangorestframework = "*"
+django-ckeditor = "*"
+pillow = "*"
 
 [dev-packages]
 
 [requires]
-python_version = "3.11"
+python_version = "3.12"

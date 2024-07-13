@@ -1,13 +1,14 @@
 from utils.general_model import GeneralModel
 from django.db import models
-from django_quill.fields import QuillField
-
+from django_ckeditor_5.fields import CKEditor5Field
+from django.utils.crypto import get_random_string
 
 class Post(GeneralModel):
     post_id=models.CharField(
         verbose_name="شناسه",
-        unique=True,
-        max_length=20
+        max_length=25,
+        null=True,
+        blank=True
     )
 
     title=models.CharField(
@@ -18,11 +19,11 @@ class Post(GeneralModel):
         upload_to="posts/headers/",
         verbose_name="تصویر"
     )
-    text=QuillField(
-        verbose_name="متن",
-        null=True,
-        blank=True
+    text=CKEditor5Field(
+        'Text', 
+        config_name='extends'
     )
+
     creator=models.ForeignKey(
         'accounts.User',
         on_delete=models.CASCADE,
@@ -31,12 +32,7 @@ class Post(GeneralModel):
         default=0,
         verbose_name='بازدید'
     )
-    comments=models.ManyToManyField(
-        'contents.Comment',
-        related_name='comments_post',
-        blank=True,
-        verbose_name='نظرات'
-    )
+
 
     keywords=models.ManyToManyField(
         'contents.Keyword',
@@ -44,7 +40,12 @@ class Post(GeneralModel):
         blank=True,
         verbose_name='کلمات کلیدی'
     )
-
+    categories=models.ForeignKey(
+        'contents.Category',
+        related_name="category",
+        on_delete=models.DO_NOTHING,
+        verbose_name="دسته‌بندی"
+    )
     is_active=models.BooleanField(
         default=True,
         verbose_name="فعال بودن"
@@ -52,9 +53,14 @@ class Post(GeneralModel):
     class Meta:
         verbose_name="پست"
         verbose_name_plural="پست‌ها"
+
     def __str__(self):
         return self.title
 
+    def save(self, *args, **kwargs):
+        if self.post_id is None:
+            self.post_id=get_random_string(length=20,allowed_chars='0123456789')
+        super(Post, self).save(*args, **kwargs)
 
 
     

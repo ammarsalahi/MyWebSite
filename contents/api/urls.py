@@ -4,8 +4,9 @@ from django.urls import path
 router=DefaultRouter()
 
 router.register('posts',PostViewSet,basename='posts')
-router.register('comments',CommentViewSet,basename='comments')
 router.register('keywords',KeywordViewSet,basename='keywords')
+router.register('categories',CategoryViewSet,basename='categories')
+
 
 
 app_name="contents"
