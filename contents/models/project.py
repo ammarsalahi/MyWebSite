@@ -2,6 +2,7 @@ from utils.general_model import GeneralModel
 from django.db import models
 
 class Project(GeneralModel):
+
     project_id=models.CharField(
         verbose_name="شناسه",
         max_length=12
@@ -9,6 +10,10 @@ class Project(GeneralModel):
     title=models.CharField(
         verbose_name="عنوان",
         max_length=200
+    )
+    header_image=models.ImageField(
+        upload_to='projects/imgs/',
+        verbose_name="تصویر نمایه"
     )
     images=models.ManyToManyField(
         'contents.Image',

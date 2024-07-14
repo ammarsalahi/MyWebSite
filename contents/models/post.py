@@ -15,6 +15,12 @@ class Post(GeneralModel):
         verbose_name="عنوان",
         max_length=200
     )
+    header=models.CharField(
+        max_length=255,
+        verbose_name="چکیده",
+        null=True,
+        blank=True
+    )
     header_img=models.ImageField(
         upload_to="posts/headers/",
         verbose_name="تصویر"
@@ -42,7 +48,7 @@ class Post(GeneralModel):
         blank=True,
         verbose_name='کلمات کلیدی'
     )
-    categories=models.ForeignKey(
+    category=models.ForeignKey(
         'contents.Category',
         related_name="category",
         on_delete=models.DO_NOTHING,

@@ -6,6 +6,9 @@ router=DefaultRouter()
 router.register('posts',PostViewSet,basename='posts')
 router.register('keywords',KeywordViewSet,basename='keywords')
 router.register('categories',CategoryViewSet,basename='categories')
+router.register('projects',ProjectViewset,basename="projects")
+router.register('technologies',TechnologyViewset,basename='technologies')
+router.register('images',ImageViewset,basename='images')
 
 
 
@@ -14,5 +17,5 @@ app_name="contents"
 urlpatterns=router.urls
 
 urlpatterns+=[
-    path("list-posts/",NewPostsListView.as_view())
+    path('home/',HomeView.as_view())
 ]
