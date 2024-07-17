@@ -6,10 +6,10 @@ name = "pypi"
 [packages]
 django = "==4.2"
 djangorestframework = "*"
-django-ckeditor = "*"
 pillow = "*"
-django-ckeditor-5 = "*"
+django-filter = "*"
 django-froala-editor = "*"
+django-cors-headers = "*"
 
 [dev-packages]
 

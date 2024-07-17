@@ -36,5 +36,8 @@ class UserAbout(GeneralModel):
     @property
     def fullname(self):
         return '{} {}'.format(self.user.first_name,self.user.last_name)
-
+    
+    @property 
+    def user_img(self):
+        return self.user.profile_image.url 
 

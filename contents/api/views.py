@@ -6,20 +6,21 @@ from django.utils.crypto import get_random_string
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
+from django_filters.rest_framework import DjangoFilterBackend
+from .filters import *
+from django.shortcuts import get_object_or_404
+from django.contrib.auth import get_user_model
 
+User=get_user_model()
 
 class PostViewSet(ModelViewSet):
     queryset=Post.objects.all().order_by('-created_at')
     serializer_class=PostSerializer
     lookup_field='post_id'
+    filter_backends=[DjangoFilterBackend]
+    filterset_class=PostFilter
 
 
-class NewPostsListView(ListAPIView):
-    queryset=Post.objects.all()[:8]
-    serializer_class=PostSerializer
-    lookup_field="post_id"
-
-    
 
 class KeywordViewSet(ModelViewSet):
     queryset=Keyword.objects.all().order_by('-created_at')
@@ -33,7 +34,9 @@ class CategoryViewSet(ModelViewSet):
 class ProjectViewset(ModelViewSet):
     queryset=Project.objects.all()
     serializer_class=ProjectSerializer
-    lookup_field='project_id'    
+    lookup_field='project_id'   
+    filter_backends=[DjangoFilterBackend]
+    filterset_class=ProjectFilter 
 
 class TechnologyViewset(ModelViewSet):
     queryset=Technology.objects.all()
@@ -44,10 +47,18 @@ class ImageViewset(ModelViewSet):
     serializer_class=ImageSerializer
 
 class HomeView(APIView):
+    
+    
     def get(self,request,format=None):
-        post_serializer=PostSerializer(instance=Post.objects.all()[:8],many=True)
-        project_serializer=ProjectSerializer(instance=Project.objects.all()[:8],many=True)
+        data={}
+        data['posts']=PostSerializer(instance=Post.objects.all()[:8],many=True).data
+        data['projects']=ProjectSerializer(instance=Project.objects.all()[:8],many=True).data
+        try:
+            user=get_object_or_404(User,username="ammar")
+            data['userimg']=request.build_absolute_uri(user.profile_image.url)
+        except User.DoesNotExist:
+            pass    
         return Response(
-            data={'posts':post_serializer.data, 'projects':project_serializer.data,},
+            data=data,
             status=status.HTTP_200_OK
         )

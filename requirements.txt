@@ -1,0 +1,8 @@
+-i https://pypi.org/simple
+asgiref==3.8.1; python_version >= '3.8'
+django==4.2; python_version >= '3.8'
+django-filter==24.2; python_version >= '3.8'
+django-froala-editor==4.2.1
+djangorestframework==3.15.2; python_version >= '3.8'
+pillow==10.4.0; python_version >= '3.8'
+sqlparse==0.5.1; python_version >= '3.8'

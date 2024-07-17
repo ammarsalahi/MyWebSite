@@ -69,6 +69,7 @@ class Post(GeneralModel):
         if self.post_id is None:
             self.post_id=get_random_string(length=20,allowed_chars='0123456789')
         super(Post, self).save(*args, **kwargs)
-
+    def header_image_url(self):
+        return self.header_img.url
 
     

@@ -15,4 +15,4 @@ class Social(GeneralModel):
         verbose_name_plural="حساب‌های اجتماعی"
 
     def __str__(self):
-        return name    
+        return self.name    

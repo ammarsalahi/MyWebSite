@@ -3,6 +3,9 @@ from django.db import models
 from .user_manager import UserManager
 
 
+def get_default_image():
+    return 'users/photo/userimg.png'
+
 class User(AbstractBaseUser):
     first_name = models.CharField(
         max_length=300,
@@ -30,8 +33,8 @@ class User(AbstractBaseUser):
     profile_image=models.ImageField(
         upload_to="users/photo/",
         verbose_name="تصویر پروفایل",
-        null=True,
-        blank=True
+        default=get_default_image(),
+
     )
     is_superuser = models.BooleanField(
         default=False
