@@ -22,7 +22,7 @@ class SocialViewset(ModelViewSet):
 class UserAboutShowView(APIView):
     def get(self,request,format=None):
         try:
-            user=User.objects.get(username='admins')
+            user=User.objects.get(username='ammar')
             about=UserAbout.objects.get(user=user)
             return Response(
                 data=UserAboutSerializer(instance=about).data,

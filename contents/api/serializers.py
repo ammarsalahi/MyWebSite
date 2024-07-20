@@ -20,13 +20,16 @@ class CategorySerializer(serializers.ModelSerializer):
         
 class PostSerializer(serializers.ModelSerializer):
     category=CategorySerializer()
+    # header_img_url=serializers.SerializerMethodField()
+
     class Meta:
         model=Post
         fields="__all__"
-    def to_representation(self,instance):
+    
+    def to_representation(self, instance):
         data = super(PostSerializer, self).to_representation(instance)
-        data['keywords']=KeywordSerializer(instance=instance.keywords.all(),many=True).data
-        # data['category']=CategorySerializer(instance=Category.objects.get(instance.category.id)).data
+        data['keywords'] = KeywordSerializer(instance=instance.keywords.all(), many=True).data
+        data['persian_date']=instance.post_date
         return data
 
 class TechnologySerializer(serializers.ModelSerializer):

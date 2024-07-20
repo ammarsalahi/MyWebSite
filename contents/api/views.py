@@ -62,3 +62,28 @@ class HomeView(APIView):
             data=data,
             status=status.HTTP_200_OK
         )
+
+
+class PostFullDetailView(APIView):
+    def get(self,request,id,format=None):
+        try:
+            post=get_object_or_404(Post,post_id=id)
+            data={
+                'posts':PostSerializer(instance=post).data,
+                'others':PostSerializer(instance=post.category.post_set.all(),many=True).data
+            }
+            return Response(data=data,status=status.HTTP_200_OK)
+        except Post.DoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+
+class ProjectFullDetailView(APIView):
+    def get(self,request,id,format=None):
+        try:
+            project=get_object_or_404(Project,post_id=id)
+            data={
+                'posts':ProjectSerializer(instance=project).data,
+                'others':ProjectSerializer(instance=Project.objects.all(),many=True).data
+            }
+            return Response(data=data,status=status.HTTP_200_OK)
+        except Project.DoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)        

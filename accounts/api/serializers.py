@@ -31,3 +31,8 @@ class UserAboutSerializer(serializers.ModelSerializer):
         data['fullname']=instance.fullname
         data['user_img']=instance.user_img
         return data   
+
+class  CooperationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model=Cooperation
+        fields="__all__"

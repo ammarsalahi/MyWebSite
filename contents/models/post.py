@@ -2,6 +2,7 @@ from utils.general_model import GeneralModel
 from django.db import models
 from django.utils.crypto import get_random_string
 from froala_editor.fields import FroalaField
+from django.contrib.humanize.templatetags.humanize import naturaltime,naturalday
 
 class Post(GeneralModel):
     post_id=models.CharField(
@@ -50,7 +51,6 @@ class Post(GeneralModel):
     )
     category=models.ForeignKey(
         'contents.Category',
-        related_name="category",
         on_delete=models.DO_NOTHING,
         verbose_name="دسته‌بندی"
     )
@@ -69,7 +69,16 @@ class Post(GeneralModel):
         if self.post_id is None:
             self.post_id=get_random_string(length=20,allowed_chars='0123456789')
         super(Post, self).save(*args, **kwargs)
-    def header_image_url(self):
-        return self.header_img.url
+
+    @property 
+    def post_date(self):
+        human_date=naturaltime(self.created_at)
+        return human_date
+        # translator = Translator()
+        # result = translator.translate(human_date, dest='es')
+        # return result.text
+    # @property    
+    # def header_image_url(self):
+    #     return self.header_img.url
 
     
