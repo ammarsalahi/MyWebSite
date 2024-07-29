@@ -51,6 +51,8 @@ class HomeView(APIView):
         data={}
         data['posts']=PostSerializer(instance=Post.objects.all().order_by('-created_at')[:8],many=True).data
         data['projects']=ProjectSerializer(instance=Project.objects.all()[:8],many=True).data
+        data['categories']=CategorySerializer(instance=Category.objects.all(),many=True).data
+        data['teches']=TechnologySerializer(instance=Technology.objects.all(),many=True).data
         try:
             user=get_object_or_404(User,username="ammar")
             data['userimg']=request.build_absolute_uri(user.profile_image.url)
@@ -80,7 +82,8 @@ class ProjectFullDetailView(APIView):
             project=get_object_or_404(Project,project_id=id)
             data={
                 'projects':ProjectSerializer(instance=project).data,
-                'others':ProjectSerializer(instance=Project.objects.all(),many=True).data
+                'others':ProjectSerializer(instance=Project.objects.all(),many=True).data,
+               
             }
             return Response(data=data,status=status.HTTP_200_OK)
         except Project.DoesNotExist:
