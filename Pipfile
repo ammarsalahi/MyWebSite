@@ -5,11 +5,13 @@ name = "pypi"
 
 [packages]
 django = "==4.2"
-djangorestframework = "*"
-pillow = "*"
-django-filter = "*"
-django-froala-editor = "*"
+djangorestframework = "==3.15.2"
+pillow = "==10.4.0"
+django-filter = "==24.2"
+django-froala-editor = "==4.2.1"
 django-cors-headers = "*"
+asgiref = "==3.8.1"
+sqlparse = "==0.5.1"
 
 [dev-packages]
 

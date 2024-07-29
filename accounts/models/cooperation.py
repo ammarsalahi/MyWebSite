@@ -21,11 +21,7 @@ class Cooperation(GeneralModel):
 		null=True,
 		blank=True
 	)
-	website_url=models.URLField(
-		verbose_name="آدرس سایت مشابه",
-		null=True,
-		blank=True
-	)
+
 	website_image=models.ImageField(
 		upload_to="cooperation/site_images/",
 		verbose_name="نمونه تصویر",

@@ -47,11 +47,9 @@ class ImageViewset(ModelViewSet):
     serializer_class=ImageSerializer
 
 class HomeView(APIView):
-    
-    
     def get(self,request,format=None):
         data={}
-        data['posts']=PostSerializer(instance=Post.objects.all()[:8],many=True).data
+        data['posts']=PostSerializer(instance=Post.objects.all().order_by('-created_at')[:8],many=True).data
         data['projects']=ProjectSerializer(instance=Project.objects.all()[:8],many=True).data
         try:
             user=get_object_or_404(User,username="ammar")
@@ -79,11 +77,16 @@ class PostFullDetailView(APIView):
 class ProjectFullDetailView(APIView):
     def get(self,request,id,format=None):
         try:
-            project=get_object_or_404(Project,post_id=id)
+            project=get_object_or_404(Project,project_id=id)
             data={
-                'posts':ProjectSerializer(instance=project).data,
+                'projects':ProjectSerializer(instance=project).data,
                 'others':ProjectSerializer(instance=Project.objects.all(),many=True).data
             }
             return Response(data=data,status=status.HTTP_200_OK)
         except Project.DoesNotExist:
             return Response(status=status.HTTP_404_NOT_FOUND)        
+
+class newPostsView(ListAPIView):
+    queryset=Post.objects.all()
+    serializer_class=PostSerializer
+

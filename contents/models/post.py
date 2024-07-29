@@ -73,7 +73,11 @@ class Post(GeneralModel):
     @property 
     def post_date(self):
         human_date=naturaltime(self.created_at)
-        return human_date
+        if '،' in human_date:
+            result=human_date.split("،")
+            return '{} پیش'.format(result[0])
+        else:
+            return human_date
         # translator = Translator()
         # result = translator.translate(human_date, dest='es')
         # return result.text

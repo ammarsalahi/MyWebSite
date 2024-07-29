@@ -19,6 +19,6 @@ urlpatterns=router.urls
 urlpatterns+=[
     path('home/',HomeView.as_view()),
     path('post-detail/<str:id>',PostFullDetailView.as_view()),
-    path('project-detail/<str:id>',ProjectFullDetailView.as_view())
-
+    path('project-detail/<str:id>',ProjectFullDetailView.as_view()),
+    path('new-posts/',newPostsView.as_view()),
 ]

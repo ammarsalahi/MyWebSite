@@ -1,5 +1,5 @@
-from django_filters import FilterSet,CharFilter
-from contents.models import Post,Project
+from django_filters import FilterSet,CharFilter,ModelMultipleChoiceFilter
+from contents.models import Post,Project,Technology,Keyword
 from django.db.models import Q
 
 
@@ -7,7 +7,9 @@ class PostFilter(FilterSet):
     q=CharFilter(method='search_post')
     sort=CharFilter(method='sorting')
     cate=CharFilter(method='search_category',field_name='دسته‌بندی')
-
+    keywords=ModelMultipleChoiceFilter(
+        queryset=Keyword.objects.all()
+    )
     class Meta:
         model=Post
         fields=('q','sort','cate','keywords')
@@ -33,10 +35,12 @@ class PostFilter(FilterSet):
 class ProjectFilter(FilterSet):
     q=CharFilter(method='search_project')
     sort=CharFilter(method='sorting')
-
+    technologies =ModelMultipleChoiceFilter(
+        queryset=Technology.objects.all(),
+    )
     class Meta:
         model=Project
-        fields=('q','sort')
+        fields=('q','sort','technologies')
 
     def search_post(self,queryset,name,value):
         return  queryset.filter(

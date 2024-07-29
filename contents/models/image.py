@@ -12,4 +12,4 @@ class Image(GeneralModel):
         verbose_name_plural="تصاویر"
 
     def __str__(self):
-        return self.id    
+        return "{}".format(self.id)    

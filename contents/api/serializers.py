@@ -35,18 +35,20 @@ class PostSerializer(serializers.ModelSerializer):
 class TechnologySerializer(serializers.ModelSerializer):
     class Meta:
         model=Technology
-        field='__all__'
+        fields='__all__'
 
 class ImageSerializer(serializers.ModelSerializer):
     class Meta:
         model=Image
         fields="__all__"
 
-class ProjectSerializer(serializers.ModelSerializer):
+class ProjectSerializer(serializers.ModelSerializer):    
     class Meta:
         model=Project
         fields="__all__"
     def to_representation(self,instance):
         data = super(ProjectSerializer, self).to_representation(instance)
-        data['techonologies']=TechnologySerializer(instance=instance.techonologies.all(),many=True).data
+        data['technologies']=TechnologySerializer(instance=instance.technologies.all(),many=True).data
+        data['images']=ImageSerializer(instance=instance.images.all(),many=True).data
+        data['persian_date']=instance.project_date
         return data    

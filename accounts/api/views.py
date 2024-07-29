@@ -1,5 +1,5 @@
 from rest_framework.viewsets import ModelViewSet
-from accounts.models import UserAbout,Social
+from accounts.models import UserAbout,Social,Cooperation
 from .serializers import *
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -30,3 +30,8 @@ class UserAboutShowView(APIView):
             )
         except (User.DoesNotExist,UserAbout.DoesNotExist):
             return Response(status=status.HTTP_404_NOT_FOUND)
+
+class CooperationViewset(ModelViewSet):
+    queryset=Cooperation.objects.all()
+    serializer_class=CooperationSerializer
+    
