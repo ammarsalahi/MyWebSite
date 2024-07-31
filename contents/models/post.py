@@ -78,11 +78,16 @@ class Post(GeneralModel):
             return '{} پیش'.format(result[0])
         else:
             return human_date
-        # translator = Translator()
-        # result = translator.translate(human_date, dest='es')
-        # return result.text
-    # @property    
-    # def header_image_url(self):
-    #     return self.header_img.url
 
+    @property
+    def reading_time(self):
+        words_per_minute = 150
+        num_words = len(self.text.split())
+        reading_time_minutes = num_words / words_per_minute
+        if reading_time_minutes < 1:
+            return "خواندن کمتر از 1 دقیقه"
+        elif reading_time_minutes == 1:
+            return "خواندن 1 دقیقه"
+        else:
+            return f"خواندن {reading_time_minutes:.2f} دقیقه"
     

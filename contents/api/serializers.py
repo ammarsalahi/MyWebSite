@@ -20,7 +20,6 @@ class CategorySerializer(serializers.ModelSerializer):
         
 class PostSerializer(serializers.ModelSerializer):
     category=CategorySerializer()
-    # header_img_url=serializers.SerializerMethodField()
 
     class Meta:
         model=Post
@@ -30,6 +29,7 @@ class PostSerializer(serializers.ModelSerializer):
         data = super(PostSerializer, self).to_representation(instance)
         data['keywords'] = KeywordSerializer(instance=instance.keywords.all(), many=True).data
         data['persian_date']=instance.post_date
+        data['reading_time']=instance.reading_time
         return data
 
 class TechnologySerializer(serializers.ModelSerializer):
@@ -43,12 +43,16 @@ class ImageSerializer(serializers.ModelSerializer):
         fields="__all__"
 
 class ProjectSerializer(serializers.ModelSerializer):    
+
     class Meta:
         model=Project
         fields="__all__"
+
     def to_representation(self,instance):
         data = super(ProjectSerializer, self).to_representation(instance)
         data['technologies']=TechnologySerializer(instance=instance.technologies.all(),many=True).data
         data['images']=ImageSerializer(instance=instance.images.all(),many=True).data
         data['persian_date']=instance.project_date
+        data['reading_time']=instance.reading_time
+
         return data    

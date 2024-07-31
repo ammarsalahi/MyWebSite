@@ -60,3 +60,15 @@ class Project(GeneralModel):
             return '{} پیش'.format(result[0])
         else:
             return human_date
+    
+    @property
+    def reading_time(self):
+        words_per_minute = 150
+        num_words = len(self.text.split())
+        reading_time_minutes = num_words / words_per_minute
+        if reading_time_minutes < 1:
+            return "خواندن کمتر از 1 دقیقه"
+        elif reading_time_minutes == 1:
+            return "خواندن 1 دقیقه"
+        else:
+            return f"خواندن {reading_time_minutes:.2f} دقیقه"    
