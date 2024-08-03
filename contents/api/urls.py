@@ -21,4 +21,5 @@ urlpatterns+=[
     path('post-detail/<str:id>',PostFullDetailView.as_view()),
     path('project-detail/<str:id>',ProjectFullDetailView.as_view()),
     path('new-posts/',newPostsView.as_view()),
+    path('footer/',FooterView.as_view()),
 ]

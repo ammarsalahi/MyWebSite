@@ -85,7 +85,7 @@ class Post(GeneralModel):
         num_words = len(self.text.split())
         reading_time_minutes = num_words / words_per_minute
         if reading_time_minutes < 1:
-            return "خواندن کمتر از 1 دقیقه"
+            return "خواندن زیر 1 دقیقه"
         elif reading_time_minutes == 1:
             return "خواندن 1 دقیقه"
         else:

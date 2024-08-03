@@ -51,8 +51,8 @@ class HomeView(APIView):
         data={
             'posts':PostSerializer(instance=Post.objects.all().order_by('-created_at')[:8],many=True).data,
             'projects':ProjectSerializer(instance=Project.objects.all()[:8],many=True).data,
-            'categories':CategorySerializer(instance=Category.objects.all(),many=True).data,
-            'teches':TechnologySerializer(instance=Technology.objects.all(),many=True).data
+            # 'categories':CategorySerializer(instance=Category.objects.all(),many=True).data,
+            # 'teches':TechnologySerializer(instance=Technology.objects.all(),many=True).data
         }
         try:
             user=get_object_or_404(User,username="ammar")
@@ -94,3 +94,10 @@ class newPostsView(ListAPIView):
     queryset=Post.objects.all()
     serializer_class=PostSerializer
 
+class FooterView(APIView):
+    def get(self,request,format=None):
+        data={
+            'categories':CategorySerializer(instance=Category.objects.all(),many=True).data,
+            'teches':TechnologySerializer(instance=Technology.objects.all(),many=True).data
+        }
+        return Response(data=data,status=status.HTTP_200_OK)
