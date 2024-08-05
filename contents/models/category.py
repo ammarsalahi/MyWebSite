@@ -6,7 +6,12 @@ class Category(GeneralModel):
         verbose_name="نام",
         max_length=200
     )
-    
+    english_name=models.CharField(
+        max_length=200,
+        verbose_name="نام انگلیسی",
+        null=True,
+        blank=True
+    )
     class Meta:
         verbose_name="دسته‌بندی‌"
         verbose_name_plural="دسته‌بندی‌ها"

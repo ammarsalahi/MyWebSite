@@ -101,3 +101,30 @@ class FooterView(APIView):
             'teches':TechnologySerializer(instance=Technology.objects.all(),many=True).data
         }
         return Response(data=data,status=status.HTTP_200_OK)
+    
+class CategoryPostView(APIView):
+    def get(self,request,name,format=None):
+        try:
+            cate=Category.objects.get(english_name=name)
+            serializer=PostSerializer(instance=cate.post_set.all(),many=True)
+            return Response(data=serializer.data)
+        except Category.DoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+
+class KeywordPostView(APIView):
+    def get(self,request,name,format=None):
+        try:
+            keys=Keyword.objects.get(english_name=name)
+            serializer=PostSerializer(instance=keys.keyword_posts.all(),many=True)
+            return Response(data=serializer.data)
+        except Category.DoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+
+class TechnologyProjectView(APIView):
+    def get(self,request,name,format=None):
+        try:
+            teches=Technology.objects.get(english_name=name)
+            serializer=ProjectSerializer(instance=teches.project_technos.all(),many=True)
+            return Response(data=serializer.data)
+        except Category.DoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
