@@ -10,6 +10,9 @@ from django_filters.rest_framework import DjangoFilterBackend
 from .filters import *
 from django.shortcuts import get_object_or_404
 from django.contrib.auth import get_user_model
+from django.db.models import Q
+
+
 
 User=get_user_model()
 
@@ -128,3 +131,66 @@ class TechnologyProjectView(APIView):
             return Response(data=serializer.data)
         except Category.DoesNotExist:
             return Response(status=status.HTTP_404_NOT_FOUND)
+
+
+
+class SearchView(APIView):
+    def filterTwoModel(self,query:str)-> tuple:
+        posts=Post.objects.filter(
+            Q(title__icontains=query)|
+            Q(header__icontains=query)|  
+            Q(category__name__icontains=query)
+        )
+        keywords=Keyword.objects.filter(
+            Q(name__icontains=query)|
+            Q(english_name__icontains=query)
+        )
+        teches=Technology.objects.filter(
+            Q(name__icontains=query)|
+            Q(english_name__icontains=query)
+        )
+        projects=Project.objects.filter(
+            Q(title__icontains=query)|
+            Q(text__icontains=query)
+        )
+        keyword_posts = Post.objects.filter(keywords__in=keywords)
+        teches_projects=Project.objects.filter(technologies__in=teches)
+        postresult = posts | keyword_posts
+        projectresult=projects|teches_projects
+
+        return postresult,projectresult
+    def create_post_json(self,obj):
+        return {
+            'types':'post',
+            'post_id':obj.post_id,
+            'title':obj.title,
+            'header_image':obj.header_image.url,
+            'category':{
+                "name":obj.category.name
+            },
+            'persian_date':obj.post_date,
+            'reading_time':obj.reading_time,
+        }
+    def create_project_json(self,obj):
+        return {
+            'types':'project',
+            'project_id':obj.project_id,
+            'title':obj.title,
+            'header_image':obj.header_image.url,
+            'persian_date':obj.project_date,
+            'reading_time':obj.reading_time,
+        }
+    def get(self,request,format=None):
+        q=request.GET.get('q')
+        if q is not None:
+            try:
+                posts,projects=self.filterTwoModel(q)
+                list_post=[self.create_post_json(obj) for obj in posts]
+                list_project=[self.create_project_json(obj) for obj in projects]
+                result=list_post+list_project
+                return Response(data=result,status=status.HTTP_200_OK)
+            except (Post.DoesNotExist,Project.DoesNotExist,Keyword.DoesNotExist,Technology.DoesNotExist):
+                return Response(status=status.HTTP_404_NOT_FOUND)    
+ 
+
+

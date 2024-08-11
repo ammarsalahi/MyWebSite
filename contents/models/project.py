@@ -35,7 +35,7 @@ class Project(GeneralModel):
     )
     technologies=models.ManyToManyField(
         'contents.Technology',
-        related_name="project_technos",
+        related_name="projects",
         verbose_name="تکنولوژی‌ها"
     )
 

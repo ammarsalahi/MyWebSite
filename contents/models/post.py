@@ -22,7 +22,7 @@ class Post(GeneralModel):
         null=True,
         blank=True
     )
-    header_img=models.ImageField(
+    header_image=models.ImageField(
         upload_to="posts/headers/",
         verbose_name="تصویر"
     )
@@ -45,7 +45,7 @@ class Post(GeneralModel):
 
     keywords=models.ManyToManyField(
         'contents.Keyword',
-        related_name="keyword_posts",
+        related_name="posts",
         blank=True,
         verbose_name='کلمات کلیدی'
     )
@@ -67,7 +67,7 @@ class Post(GeneralModel):
 
     def save(self, *args, **kwargs):
         if self.post_id is None:
-            self.post_id=get_random_string(length=20,allowed_chars='0123456789')
+            self.post_id=get_random_string(length=12,allowed_chars='0123456789')
         super(Post, self).save(*args, **kwargs)
 
     @property 
