@@ -117,8 +117,8 @@ class CategoryPostView(APIView):
 class KeywordPostView(APIView):
     def get(self,request,name,format=None):
         try:
-            keys=Keyword.objects.get(english_name=name)
-            serializer=PostSerializer(instance=keys.keyword_posts.all(),many=True)
+            keys=Keyword.objects.filter(english_name=name)
+            serializer=PostSerializer(instance=Post.objects.filter(keywords__in=keys),many=True)
             return Response(data=serializer.data)
         except Category.DoesNotExist:
             return Response(status=status.HTTP_404_NOT_FOUND)
@@ -126,10 +126,11 @@ class KeywordPostView(APIView):
 class TechnologyProjectView(APIView):
     def get(self,request,name,format=None):
         try:
-            teches=Technology.objects.get(english_name=name)
-            serializer=ProjectSerializer(instance=teches.project_technos.all(),many=True)
+            teches=Technology.objects.filter(english_name=name)
+            print(teches)
+            serializer=ProjectSerializer(instance=Project.objects.filter(technologies__in=teches),many=True)
             return Response(data=serializer.data)
-        except Category.DoesNotExist:
+        except Technology.DoesNotExist:
             return Response(status=status.HTTP_404_NOT_FOUND)
 
 
