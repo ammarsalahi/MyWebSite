@@ -44,5 +44,3 @@ class Cooperation(GeneralModel):
 		verbose_name="هماکاری"
 		verbose_name_plural="همکاری ها"
 	
-	def __str__(self):
-		return self.id		

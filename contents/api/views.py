@@ -11,8 +11,8 @@ from .filters import *
 from django.shortcuts import get_object_or_404
 from django.contrib.auth import get_user_model
 from django.db.models import Q
-
-
+from .paginations import ContentPagination
+from rest_framework.generics import GenericAPIView
 
 User=get_user_model()
 
@@ -22,6 +22,7 @@ class PostViewSet(ModelViewSet):
     lookup_field='post_id'
     filter_backends=[DjangoFilterBackend]
     filterset_class=PostFilter
+    pagination_class=ContentPagination
 
 
 
@@ -40,6 +41,7 @@ class ProjectViewset(ModelViewSet):
     lookup_field='project_id'   
     filter_backends=[DjangoFilterBackend]
     filterset_class=ProjectFilter 
+    pagination_class=ContentPagination
 
 class TechnologyViewset(ModelViewSet):
     queryset=Technology.objects.all()
@@ -104,34 +106,82 @@ class FooterView(APIView):
             'teches':TechnologySerializer(instance=Technology.objects.all(),many=True).data
         }
         return Response(data=data,status=status.HTTP_200_OK)
-    
-class CategoryPostView(APIView):
-    def get(self,request,name,format=None):
+
+
+class CategoryPostView(GenericAPIView):
+    pagination_class = ContentPagination
+    serializer_class = PostSerializer
+
+    def get_queryset(self):
+        name = self.kwargs['name']
         try:
-            cate=Category.objects.get(english_name=name)
-            serializer=PostSerializer(instance=cate.post_set.all(),many=True)
-            return Response(data=serializer.data)
+            return Category.objects.get(english_name=name).post_set.all()
+        except Category.DoesNotExist:
+            return []
+    def get(self, request, name, format=None):
+        try:
+            queryset = Category.objects.get(english_name=name).post_set.all()
+            page = self.paginate_queryset(queryset)
+            if page is not None:
+                serializer = self.get_serializer(page, many=True)
+                return self.get_paginated_response(serializer.data)
+            serializer = self.get_serializer(queryset, many=True)
+            return Response(serializer.data)
         except Category.DoesNotExist:
             return Response(status=status.HTTP_404_NOT_FOUND)
 
-class KeywordPostView(APIView):
+
+class KeywordPostView(GenericAPIView):
+    pagination_class=ContentPagination
+    serializer_class=PostSerializer
+
+    def get_queryset(self):
+        name = self.kwargs['name']
+        try:
+            keywords=Keyword.objects.filter(english_name=name)
+            return Post.objects.filter(keywords__in=keywords)
+        except Keyword.DoesNotExist:
+            return []
+        
     def get(self,request,name,format=None):
         try:
-            keys=Keyword.objects.filter(english_name=name)
-            serializer=PostSerializer(instance=Post.objects.filter(keywords__in=keys),many=True)
-            return Response(data=serializer.data)
-        except Category.DoesNotExist:
+            keywords=Keyword.objects.filter(english_name=name)
+            queryset=Post.objects.filter(keywords__in=keywords)
+            page=self.paginate_queryset(queryset)
+            if page is not None:
+                serializer=self.get_serializer(page,many=True)
+                return self.get_paginated_response(serializer.data)
+            serializer=self.get_serializer(page,many=True)
+            return Response(serializer.data)
+        except Keyword.DoesNotExist:
             return Response(status=status.HTTP_404_NOT_FOUND)
 
-class TechnologyProjectView(APIView):
+
+
+class TechnologyProjectView(GenericAPIView):
+    pagination_class=ContentPagination
+    serializer_class=ProjectSerializer
+    def get_queryset(self):
+        name = self.kwargs['name']
+        try:
+            teches=Technology.objects.filter(english_name=name)
+            return Project.objects.filter(technologies__in=teches)
+        except Technology.DoesNotExist:
+            return []
+        
     def get(self,request,name,format=None):
         try:
             teches=Technology.objects.filter(english_name=name)
-            print(teches)
-            serializer=ProjectSerializer(instance=Project.objects.filter(technologies__in=teches),many=True)
-            return Response(data=serializer.data)
+            queryset=Project.objects.filter(technologies__in=teches)
+            page=self.paginate_queryset(queryset)
+            if page is not None:
+                serializer=self.get_serializer(page,many=True)
+                return self.get_paginated_response(serializer.data)
+            serializer=self.get_serializer(page,many=True)
+            return Response(serializer.data)
         except Technology.DoesNotExist:
             return Response(status=status.HTTP_404_NOT_FOUND)
+  
 
 
 
@@ -189,7 +239,8 @@ class SearchView(APIView):
                 list_post=[self.create_post_json(obj) for obj in posts]
                 list_project=[self.create_project_json(obj) for obj in projects]
                 result=list_post+list_project
-                return Response(data=result,status=status.HTTP_200_OK)
+                final_result = self.paginate_queryset(result, request, view=self)
+                return self.get_paginated_response(final_result)
             except (Post.DoesNotExist,Project.DoesNotExist,Keyword.DoesNotExist,Technology.DoesNotExist):
                 return Response(status=status.HTTP_404_NOT_FOUND)    
  
