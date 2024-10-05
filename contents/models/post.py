@@ -17,7 +17,7 @@ class Post(GeneralModel):
         max_length=200
     )
     header=models.CharField(
-        max_length=255,
+        max_length=400,
         verbose_name="چکیده",
         null=True,
         blank=True

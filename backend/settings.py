@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'froala_editor', 
     'django_filters',
     "corsheaders",
+    "rest_framework_simplejwt",
     
     'accounts',
     'contents',
@@ -149,3 +150,16 @@ CORS_ALLOW_ALL_ORIGINS=True
 #     "http://localhost:8080",
 #     "http://127.0.0.1:9000",
 # ]
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    )
+}
+from datetime import timedelta
+
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(days=1),  # Token lifetime (example: 30 minutes)
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=2),     # Refresh token lifetime (example: 1 day)
+}
+

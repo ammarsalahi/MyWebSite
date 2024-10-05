@@ -24,6 +24,53 @@ class PostViewSet(ModelViewSet):
     filterset_class=PostFilter
     pagination_class=ContentPagination
 
+    def create(self,request,*args,**kwargs):
+        data=request.data
+        print(data)
+        cat_id=data.get('category')
+        try:
+            category=Category.objects.get(id=int(cat_id))
+        except Category.DoesNotExist:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+        img=request.FILES.get('header_image',None)    
+        post = Post.objects.create(
+            title=data.get('title'),
+            text=data.get('text'),
+            header=data.get('header'),
+            header_image=img,
+            creator=request.user,
+            category=category,
+            is_active=data.get('is_active')=='true'
+        )         
+        keys_id=data.getlist('keywords')
+        for key in keys_id:
+            try:
+                keyword=Keyword.objects.get(id=int(key))
+                post.keywords.add(keyword)
+            except Keyword.DoesNotExist:
+                pass
+        post.save()
+        return Response(status=status.HTTP_201_CREATED)        
+
+        
+# class AddPostView(APIView):
+#     def post(self,request,format=None):
+#         data=request.data
+#         print(data.getlist('keywords'))
+#         category=Category.objects.get(id=int(data.get('category')))
+#         post=Post.objects.create(
+#             title=data.get('title'),
+#             text=data.get('text'),
+#             header=data.get('header'),
+#             header_image=data.get('header_image'),
+#             is_active=data.get('is_active')=='true',
+#             creator=request.user,
+#             category=category
+#         )
+#         return Response(status=status.HTTP_201_CREATED)
+
+
+
 
 
 class KeywordViewSet(ModelViewSet):
@@ -33,7 +80,6 @@ class KeywordViewSet(ModelViewSet):
 class CategoryViewSet(ModelViewSet):
     queryset=Category.objects.all()
     serializer_class=CategorySerializer
-    lookup_field='name'
 
 class ProjectViewset(ModelViewSet):
     queryset=Project.objects.all()
@@ -50,6 +96,8 @@ class TechnologyViewset(ModelViewSet):
 class ImageViewset(ModelViewSet):
     queryset=Image.objects.all()
     serializer_class=ImageSerializer
+
+
 
 class HomeView(APIView):
     def get(self,request,format=None):
@@ -68,6 +116,7 @@ class HomeView(APIView):
             data=data,
             status=status.HTTP_200_OK
         )
+
 
 
 class PostFullDetailView(APIView):
@@ -244,5 +293,34 @@ class SearchView(APIView):
             except (Post.DoesNotExist,Project.DoesNotExist,Keyword.DoesNotExist,Technology.DoesNotExist):
                 return Response(status=status.HTTP_404_NOT_FOUND)    
  
+class KeywordAddView(APIView):
+    def post(self,request,format=None):
+        name=request.data.get('name')
+        try:
+            key=Keyword.objects.get(name=name)
+            return Response(
+                data=KeywordSerializer(instance=key).data
+            )
+        except Keyword.DoesNotExist:
+            key=Keyword.objects.create(
+                name=name
+            )  
+            return Response(
+                data=KeywordSerializer(instance=key).data
+            )  
 
-
+class TechnologyAddView(APIView):
+    def post(self,request,format=None):
+        name=request.data.get('name')
+        try:
+            tech=Technology.object.get(name=name)
+            return Response(
+                data=TechnologySerializer(instance=tech).data
+            )
+        except Technology.DoesNotExist:
+            tech=Technology.objects.create(
+                name=name
+            )  
+            return Response(
+                data=TechnologySerializer(instance=tech).data
+            )  

@@ -18,13 +18,15 @@ urlpatterns=router.urls
 
 urlpatterns+=[
     path('home/',HomeView.as_view()),
-    path('post-detail/<str:id>',PostFullDetailView.as_view()),
-    path('project-detail/<str:id>',ProjectFullDetailView.as_view()),
+    path('post-detail/<str:id>/',PostFullDetailView.as_view()),
+    path('project-detail/<str:id>/',ProjectFullDetailView.as_view()),
     path('new-posts/',newPostsView.as_view()),
     path('footer/',FooterView.as_view()),
-    path('category-posts/<str:name>',CategoryPostView.as_view()),
-    path('keyword-posts/<str:name>',KeywordPostView.as_view()),
-    path('technology-projects/<str:name>',TechnologyProjectView.as_view()),
+    path('category-posts/<str:name>/',CategoryPostView.as_view()),
+    path('keyword-posts/<str:name>/',KeywordPostView.as_view()),
+    path('technology-projects/<str:name>/',TechnologyProjectView.as_view()),
     path('search/',SearchView.as_view()),
-
+    path('keywords-add/',KeywordAddView.as_view()),
+    path('technologies/add/',TechnologyAddView.as_view()),
+    # path('posts-add/',AddPostView.as_view()),
 ]
