@@ -7,8 +7,10 @@ class Image(GeneralModel):
         verbose_name="تصویر"
     )
     state=models.CharField(
-        max_length="to Add",
-        verbose_name="وضعیت"
+        max_length=100,
+        verbose_name="وضعیت",
+        blank=True,
+        null=True
     )
 
     class Meta:
