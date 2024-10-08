@@ -6,6 +6,10 @@ class Image(GeneralModel):
         upload_to='projects/imgs/',
         verbose_name="تصویر"
     )
+    state=models.CharField(
+        max_length="to Add",
+        verbose_name="وضعیت"
+    )
 
     class Meta:
         verbose_name="تصویر"

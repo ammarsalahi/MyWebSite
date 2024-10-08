@@ -26,7 +26,6 @@ class PostViewSet(ModelViewSet):
 
     def create(self,request,*args,**kwargs):
         data=request.data
-        print(data)
         cat_id=data.get('category')
         try:
             category=Category.objects.get(id=int(cat_id))

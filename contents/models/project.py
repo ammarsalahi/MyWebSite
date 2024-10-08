@@ -38,7 +38,10 @@ class Project(GeneralModel):
         related_name="projects",
         verbose_name="تکنولوژی‌ها"
     )
-
+    is_active=models.BooleanField(
+        default=False,
+        verbose_name="قابل مشاهده"
+    )
     class Meta:
         verbose_name="پروژه"
         verbose_name_plural="پروژه‌ها"
