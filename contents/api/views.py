@@ -51,25 +51,31 @@ class PostViewSet(ModelViewSet):
         post.save()
         return Response(status=status.HTTP_201_CREATED)        
 
-        
-# class AddPostView(APIView):
-#     def post(self,request,format=None):
-#         data=request.data
-#         print(data.getlist('keywords'))
-#         category=Category.objects.get(id=int(data.get('category')))
-#         post=Post.objects.create(
-#             title=data.get('title'),
-#             text=data.get('text'),
-#             header=data.get('header'),
-#             header_image=data.get('header_image'),
-#             is_active=data.get('is_active')=='true',
-#             creator=request.user,
-#             category=category
-#         )
-#         return Response(status=status.HTTP_201_CREATED)
-
-
-
+    def update(self,request,*args,**kwargs):
+        data=request.data
+        cat_id=data.get('category')
+        try:
+            category=Category.objects.get(id=int(cat_id))
+        except Category.DoesNotExist:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+        img=request.FILES.get('header_image',None)   
+        post=self.get_object()
+        post.title=data.get('title')
+        post.text=data.get('text')
+        post.header=data.get('header')
+        post.header_image=img
+        post.category=category
+        post.is_active=data.get('is_active')=='true'
+              
+        keys_id=data.getlist('keywords')
+        for key in keys_id:
+            try:
+                keyword=Keyword.objects.get(id=int(key))
+                post.keywords.add(keyword)
+            except Keyword.DoesNotExist:
+                pass
+        post.save()
+        return Response(status=status.HTTP_200_OK)
 
 
 class KeywordViewSet(ModelViewSet):
@@ -80,6 +86,7 @@ class CategoryViewSet(ModelViewSet):
     queryset=Category.objects.all()
     serializer_class=CategorySerializer
 
+
 class ProjectViewset(ModelViewSet):
     queryset=Project.objects.all()
     serializer_class=ProjectSerializer
@@ -87,6 +94,68 @@ class ProjectViewset(ModelViewSet):
     filter_backends=[DjangoFilterBackend]
     filterset_class=ProjectFilter 
     pagination_class=ContentPagination
+
+    def create(self,request,*args,**kwargs):
+        data=request.data
+        img=request.FILES.get('header_image',None)    
+        project=Project.objects.create(
+            title=data.get("title"),
+            header_image=img,
+            text=data.get("text"),
+            creator=request.user,
+            is_active=data.get("is_active")=='true'
+        )
+
+        techs_id=data.getlist('teches')
+        images_id=data.getlist('images')
+
+        for tid in techs_id:
+            try:
+                tech=Technology.objects.get(id=tid)
+                project.technologies.add(tech)
+            except Technology.DoesNotExist:
+                pass
+        
+        for imgid in images_id:
+            try:
+                img=Image.objects.get(id=imgid)
+                project.images.add(img)
+            except Image.DoesNotExist:
+                pass
+
+        project.save()
+        return Response(status=status.HTTP_201_CREATED)
+
+    def update(self,request,*args,**kwargs):
+        data=request.data
+        img=request.FILES.get('header_image',None)    
+        project=self.get_object()
+        project.title=data.get("title")
+        project.header_image=img
+        project.text=data.get("text")
+        project.is_active=data.get("is_active")=='true'
+
+        techs_id=data.getlist('teches')
+        images_id=data.getlist('images')
+
+        for tid in techs_id:
+            try:
+                tech=Technology.objects.get(id=tid)
+                project.technologies.add(tech)
+            except Technology.DoesNotExist:
+                pass
+        
+        for imgid in images_id:
+            try:
+                img=Image.objects.get(id=imgid)
+                project.images.add(img)
+            except Image.DoesNotExist:
+                pass
+
+        project.save()
+        return Response(status=status.HTTP_200_OK)
+
+
 
 class TechnologyViewset(ModelViewSet):
     queryset=Technology.objects.all()
