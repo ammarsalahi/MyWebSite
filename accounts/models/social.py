@@ -10,6 +10,12 @@ class Social(GeneralModel):
         verbose_name="لینک"
     )
 
+    status=models.CharField(
+        max_length=100,
+        verbose_name="وضعیت",
+        blank=True,
+        null=True
+    )
     class Meta:
         verbose_name="حساب اجتماعی"
         verbose_name_plural="حساب‌های اجتماعی"

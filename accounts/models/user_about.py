@@ -26,7 +26,8 @@ class UserAbout(GeneralModel):
     socials=models.ManyToManyField(
         'accounts.Social',
         related_name='user_socials',
-        verbose_name="حساب‌های اجتماعی"
+        verbose_name="حساب‌های اجتماعی",
+        blank=True
     )
 
     class Meta:

@@ -44,6 +44,7 @@ class UserTokenSerializer(TokenObtainPairSerializer):
         if '@' in attrs.get('username'):
             attrs['username']=User.objects.get(email=attrs.get('username'))
         data = super().validate(attrs)
-        # user = self.user
+        user = self.user
         # data['is_otp'] = user.is_two_factor_auth
+        data['username']=user.username
         return data   

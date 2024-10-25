@@ -15,6 +15,6 @@ router.register('cooperations',CooperationViewset,basename="cooperations")
 urlpatterns=router.urls
 
 urlpatterns+=[
-    path('about/',UserAboutShowView.as_view()),
+    # path('about/',UserAboutShowView.as_view()),
     path('signin/',UserSigninView.as_view())
 ]
