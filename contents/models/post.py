@@ -36,6 +36,7 @@ class Post(GeneralModel):
     creator=models.ForeignKey(
         'accounts.User',
         on_delete=models.CASCADE,
+        related_name="all_posts"
     )
     view_count=models.IntegerField(
         default=0,

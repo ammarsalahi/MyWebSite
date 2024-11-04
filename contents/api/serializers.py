@@ -17,6 +17,12 @@ class CategorySerializer(serializers.ModelSerializer):
         model=Category
         fields="__all__"
 
+    def to_representation(self,instance):
+        data = super(CategorySerializer, self).to_representation(instance)
+        data['post_count']=instance.post_count
+        return data
+
+
         
 class PostSerializer(serializers.ModelSerializer):
     category=CategorySerializer()

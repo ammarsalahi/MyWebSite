@@ -14,3 +14,18 @@ class ContentPagination(PageNumberPagination):
             'results': data
 
         })
+
+class CategoryPagination(PageNumberPagination):
+    page_size=5
+    max_page_size=32
+    page_size_query_param = 'page_size'
+
+    def get_paginated_response(self, data):
+        return Response({
+            'next': self.get_next_link(),
+            'previous': self.get_previous_link(),
+            'next_page_number': self.page.next_page_number() if self.page.has_next() else None,
+            'count': self.page.paginator.count,
+            'results': data
+
+        })

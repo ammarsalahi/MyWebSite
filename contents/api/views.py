@@ -11,7 +11,7 @@ from .filters import *
 from django.shortcuts import get_object_or_404
 from django.contrib.auth import get_user_model
 from django.db.models import Q
-from .paginations import ContentPagination
+from .paginations import *
 from rest_framework.generics import GenericAPIView
 
 User=get_user_model()
@@ -85,6 +85,7 @@ class KeywordViewSet(ModelViewSet):
 class CategoryViewSet(ModelViewSet):
     queryset=Category.objects.all()
     serializer_class=CategorySerializer
+    pagination_class=CategoryPagination
 
 
 class ProjectViewset(ModelViewSet):

@@ -13,3 +13,7 @@ class Category(GeneralModel):
 
     def __str__(self):
         return self.name    
+
+    @property 
+    def post_count(self):
+        return 0   
