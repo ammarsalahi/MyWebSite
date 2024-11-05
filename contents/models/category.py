@@ -1,6 +1,6 @@
 from utils.general_model import GeneralModel
 from django.db import models
-
+from contents.models import Post
 class Category(GeneralModel):
     name=models.CharField(
         verbose_name="نام",
@@ -16,4 +16,7 @@ class Category(GeneralModel):
 
     @property 
     def post_count(self):
-        return 0   
+        try:
+            return Post.objects.filter(category=self).count()
+        except Post.DoesNotExist:
+            return 0       

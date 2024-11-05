@@ -63,7 +63,8 @@ class PostViewSet(ModelViewSet):
         post.title=data.get('title')
         post.text=data.get('text')
         post.header=data.get('header')
-        post.header_image=img
+        if img is not None:
+            post.header_image=img
         post.category=category
         post.is_active=data.get('is_active')=='true'
               
@@ -132,7 +133,8 @@ class ProjectViewset(ModelViewSet):
         img=request.FILES.get('header_image',None)    
         project=self.get_object()
         project.title=data.get("title")
-        project.header_image=img
+        if img is not None:
+            project.header_image=img
         project.text=data.get("text")
         project.is_active=data.get("is_active")=='true'
 
