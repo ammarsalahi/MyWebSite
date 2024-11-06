@@ -13,16 +13,18 @@ from django.contrib.auth import get_user_model
 from django.db.models import Q
 from .paginations import *
 from rest_framework.generics import GenericAPIView
-
+from rest_framework.filters import OrderingFilter
 User=get_user_model()
 
 class PostViewSet(ModelViewSet):
-    queryset=Post.objects.all().order_by('-created_at')
+    queryset=Post.objects.all()
     serializer_class=PostSerializer
     lookup_field='post_id'
-    filter_backends=[DjangoFilterBackend]
+    filter_backends=[DjangoFilterBackend,OrderingFilter]
     filterset_class=PostFilter
     pagination_class=ContentPagination
+    ordering_fields=['created_at']
+    ordering=['created_at']
 
     def create(self,request,*args,**kwargs):
         data=request.data
@@ -80,7 +82,7 @@ class PostViewSet(ModelViewSet):
 
 
 class KeywordViewSet(ModelViewSet):
-    queryset=Keyword.objects.all().order_by('-created_at')
+    queryset=Keyword.objects.all()
     serializer_class=KeywordSerializer
 
 class CategoryViewSet(ModelViewSet):
@@ -93,9 +95,11 @@ class ProjectViewset(ModelViewSet):
     queryset=Project.objects.all()
     serializer_class=ProjectSerializer
     lookup_field='project_id'   
-    filter_backends=[DjangoFilterBackend]
+    filter_backends=[DjangoFilterBackend,OrderingFilter]
     filterset_class=ProjectFilter 
     pagination_class=ContentPagination
+    ordering_fields=['created_at']
+    ordering=['created_at']
 
     def create(self,request,*args,**kwargs):
         data=request.data
