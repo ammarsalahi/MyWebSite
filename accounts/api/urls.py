@@ -16,5 +16,6 @@ urlpatterns=router.urls
 
 urlpatterns+=[
     # path('about/',UserAboutShowView.as_view()),
-    path('signin/',UserSigninView.as_view())
+    path('signin/',UserSigninView.as_view()),
+    path('change-password/',UserPasswordChangeView.as_view()),
 ]

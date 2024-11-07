@@ -12,6 +12,7 @@ class UserViewset(ModelViewSet):
     queryset=User.objects.all()
     serializer_class=UserSerializer
     permission_classes=[IsAuthenticated]
+    lookup_field='username'
 
 # class UserSigninView(APIView):
 
@@ -85,3 +86,14 @@ class CooperationViewset(ModelViewSet):
     queryset=Cooperation.objects.all()
     serializer_class=CooperationSerializer
     
+class UserPasswordChangeView(APIView):
+    permission_classes=[IsAuthenticated]
+    def post(self,request,format=None):
+        data=request.data
+        user=request.user
+        if user.check_password(data['old_password']):
+            user.set_password(data['new_password'])
+            user.save()
+            return Response(status=status.HTTP_200_OK)
+        else:
+            return Response(status=status.HTTP_400_BAD_REQUEST)    
