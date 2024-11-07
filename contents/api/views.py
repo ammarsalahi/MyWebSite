@@ -17,14 +17,14 @@ from rest_framework.filters import OrderingFilter
 User=get_user_model()
 
 class PostViewSet(ModelViewSet):
-    queryset=Post.objects.all()
+    queryset=Post.objects.all().order_by('-created_at')
     serializer_class=PostSerializer
     lookup_field='post_id'
-    filter_backends=[DjangoFilterBackend,OrderingFilter]
+    filter_backends=[DjangoFilterBackend]
     filterset_class=PostFilter
     pagination_class=ContentPagination
-    ordering_fields=['created_at']
-    ordering=['created_at']
+    # ordering_fields=['created_at']
+    # ordering=['created_at']
 
     def create(self,request,*args,**kwargs):
         data=request.data
@@ -92,14 +92,14 @@ class CategoryViewSet(ModelViewSet):
 
 
 class ProjectViewset(ModelViewSet):
-    queryset=Project.objects.all()
+    queryset=Project.objects.all().order_by('-created_at')
     serializer_class=ProjectSerializer
     lookup_field='project_id'   
-    filter_backends=[DjangoFilterBackend,OrderingFilter]
+    filter_backends=[DjangoFilterBackend]
     filterset_class=ProjectFilter 
     pagination_class=ContentPagination
-    ordering_fields=['created_at']
-    ordering=['created_at']
+    # ordering_fields=['created_at']
+    # ordering=['created_at']
 
     def create(self,request,*args,**kwargs):
         data=request.data

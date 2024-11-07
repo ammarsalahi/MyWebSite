@@ -6,7 +6,12 @@ class Technology(GeneralModel):
         max_length=200,
         verbose_name="نام"
     )
-
+    english_name=models.CharField(
+        verbose_name="نام انگلیسی",
+        max_length=200,
+        blank=True,
+        null=True
+    )
     class Meta:
         verbose_name="تکنولوژی"
         verbose_name_plural="تکنولوژی‌ها"

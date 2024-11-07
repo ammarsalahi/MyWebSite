@@ -48,9 +48,17 @@ class ProjectFilter(FilterSet):
         model=Project
         fields=('q','technologies')
 
-    def search_post(self,queryset,name,value):
-        return  queryset.filter(
-            Q(title__icontains=value)|
-            Q(text__icontains=value)
-        )    
+    def search_project(self,queryset,name,value):
+        try:
+            tech=Technology.objects.get(name=value)
+            return  queryset.filter(
+                Q(title__icontains=value)|
+                Q(text__icontains=value)|
+                Q(technologies=tech)
+            ) 
+        except Technology.DoesNotExist:
+            return  queryset.filter(
+                Q(title__icontains=value)|
+                Q(text__icontains=value)
+            )    
   
