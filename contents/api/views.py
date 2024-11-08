@@ -238,11 +238,13 @@ class CategoryPostView(GenericAPIView):
 
     def get_queryset(self):
         name = self.kwargs['name']
+        print(name)
         try:
             return Category.objects.get(english_name=name).post_set.all()
         except Category.DoesNotExist:
             return []
     def get(self, request, name, format=None):
+        print(name)
         try:
             queryset = Category.objects.get(english_name=name).post_set.all()
             page = self.paginate_queryset(queryset)

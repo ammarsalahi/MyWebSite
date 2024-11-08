@@ -48,3 +48,8 @@ class UserTokenSerializer(TokenObtainPairSerializer):
         # data['is_otp'] = user.is_two_factor_auth
         data['username']=user.username
         return data   
+
+class ProfileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model=Profile
+        fields="__all__"

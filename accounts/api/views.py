@@ -97,3 +97,45 @@ class UserPasswordChangeView(APIView):
             return Response(status=status.HTTP_200_OK)
         else:
             return Response(status=status.HTTP_400_BAD_REQUEST)    
+
+
+class ProfileViewset(ModelViewSet):
+    queryset=Profile.objects.all()
+    serializer_class=ProfileSerializer
+    permission_classes=[IsAuthenticated]
+    lookup_field="user__username"
+    
+class OtpGenerateView(APIView):
+    permission_classes=[IsAuthenticated]
+    def get(self,request,format=None):
+        user = request.user
+        profile=Profile.objects.get(user=user)
+        if profile.qrcode_image is None or profile.qrcode_image == '':
+            secret = pyotp.random_base32()        
+            profile.otp_code=secret
+            profile.save()    
+            totp = pyotp.TOTP(secret)
+            qr_url = totp.provisioning_uri(user.email, issuer_name="BlogApp")
+            qr_img = qrcode.make(qr_url)
+            buffer = BytesIO()
+            qr_img.save(buffer, format="PNG")
+            buffer.seek(0)
+            file_name = f'{user.username}_otp_qr.png' 
+            profile.qrcode_image.save(file_name, File(buffer), save=True)
+            serializer=ProfileSerializer(instance=profile)    
+            return response.Response(data=serializer.data)
+        # except Profile.DoesNotExist:
+        #     return response.Response(status=status.HTTP_404_NOT_FOUND)
+
+    def post(self,request,format=None):
+        user = request.user
+        otp = request.data.get('otp')
+        
+        secret = Profile.objects.get(user=user).otp_code
+        totp = pyotp.TOTP(secret)
+        
+        if totp.verify(otp):
+            return Response(status=status.HTTP_200_OK)
+        else:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+
