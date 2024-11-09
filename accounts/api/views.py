@@ -6,6 +6,11 @@ from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
 from rest_framework_simplejwt.views import TokenObtainPairView
+import pyotp
+import qrcode
+from io import BytesIO
+from django.core.files import File
+from django.http import JsonResponse, HttpResponse
 
 
 class UserViewset(ModelViewSet):
@@ -130,8 +135,8 @@ class OtpGenerateView(APIView):
             buffer.seek(0)
             file_name = f'{user.username}_otp_qr.png' 
             profile.qrcode_image.save(file_name, File(buffer), save=True)
-            serializer=ProfileSerializer(instance=profile)    
-            return response.Response(data=serializer.data)
+        serializer=ProfileSerializer(instance=profile)    
+        return Response(data=serializer.data)
         # except Profile.DoesNotExist:
         #     return response.Response(status=status.HTTP_404_NOT_FOUND)
 
