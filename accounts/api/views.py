@@ -98,6 +98,14 @@ class UserPasswordChangeView(APIView):
         else:
             return Response(status=status.HTTP_400_BAD_REQUEST)    
 
+class UserPasswordVerify(APIView):
+    def post(self,request,format=None):
+        data=request.data
+        user=request.user
+        if user.check_password(data['pass']):
+            return Response(status=status.HTTP_200_OK)
+        else:
+            return Response(status=status.HTTP_400_BAD_REQUEST) 
 
 class ProfileViewset(ModelViewSet):
     queryset=Profile.objects.all()

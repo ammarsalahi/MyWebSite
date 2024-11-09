@@ -8,7 +8,7 @@ router=DefaultRouter()
 router.register('abouts',UserAbountViewset,basename='abouts')
 router.register('users',UserViewset,basename='users')
 router.register('socials',SocialViewset,basename='socials')
-
+router.register('profiles',ProfileViewset,basename="profiles")
 router.register('cooperations',CooperationViewset,basename="cooperations")
 
 
@@ -18,4 +18,7 @@ urlpatterns+=[
     # path('about/',UserAboutShowView.as_view()),
     path('signin/',UserSigninView.as_view()),
     path('change-password/',UserPasswordChangeView.as_view()),
+    path('verify-password/',UserPasswordVerify.as_view()),
+    path("otp/",OtpGenerateView.as_view()),
+
 ]

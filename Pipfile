@@ -12,6 +12,7 @@ django-froala-editor = "==4.2.1"
 django-cors-headers = "*"
 asgiref = "==3.8.1"
 sqlparse = "==0.5.1"
+pyotp = "*"
 
 [dev-packages]
 

@@ -24,4 +24,4 @@ class Profile(GeneralModel):
         verbose_name_plural="پروفایل‌ها"
 
     def __str__(self):
-        return user.username    
+        return self.user.username    
