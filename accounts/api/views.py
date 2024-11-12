@@ -123,18 +123,18 @@ class OtpGenerateView(APIView):
     def get(self,request,format=None):
         user = request.user
         profile=Profile.objects.get(user=user)
-        if profile.qrcode_image is None or profile.qrcode_image == '':
-            secret = pyotp.random_base32()        
-            profile.otp_code=secret
-            profile.save()    
-            totp = pyotp.TOTP(secret)
-            qr_url = totp.provisioning_uri(user.email, issuer_name="BlogApp")
-            qr_img = qrcode.make(qr_url)
-            buffer = BytesIO()
-            qr_img.save(buffer, format="PNG")
-            buffer.seek(0)
-            file_name = f'{user.username}_otp_qr.png' 
-            profile.qrcode_image.save(file_name, File(buffer), save=True)
+        # if profile.qrcode_image is None or profile.qrcode_image == '':
+        secret = pyotp.random_base32()        
+        profile.otp_code=secret
+        profile.save()    
+        totp = pyotp.TOTP(secret)
+        qr_url = totp.provisioning_uri(user.email, issuer_name="BlogApp")
+        qr_img = qrcode.make(qr_url)
+        buffer = BytesIO()
+        qr_img.save(buffer, format="PNG")
+        buffer.seek(0)
+        file_name = f'{user.username}_otp_qr.png' 
+        profile.qrcode_image.save(file_name, File(buffer), save=True)
         serializer=ProfileSerializer(instance=profile)    
         return Response(data=serializer.data)
         # except Profile.DoesNotExist:

@@ -37,16 +37,24 @@ class User(AbstractBaseUser):
 
     )
     is_superuser = models.BooleanField(
-        default=False
+        default=False,
+        verbose_name="مدیر است؟"
     )
     is_staff = models.BooleanField(
-        default=False
+        default=False,
     )
     is_active = models.BooleanField(
-        default=False
+        default=False,
+        verbose_name="فعال است؟"
     )
     is_verified = models.BooleanField(
-        default=False
+        default=False,
+        verbose_name="اعتبارسنجی شده است؟"
+    )
+
+    is_otp = models.BooleanField(
+        default=False,
+        verbose_name="اعتبارسنجی دو مرحله‌ای است؟"
     )
     class Meta:
         verbose_name="کاربر"
