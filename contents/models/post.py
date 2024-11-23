@@ -16,12 +16,28 @@ class Post(GeneralModel):
         verbose_name="عنوان",
         max_length=200
     )
+
+    english_title = models.CharField(
+        verbose_name="عنوان انگلیسی",
+        max_length=200,
+        blank=True,
+        null=True
+    )
+
     header=models.CharField(
         max_length=400,
         verbose_name="چکیده",
         null=True,
         blank=True
     )
+
+    english_header=models.CharField(
+        max_length=400,
+        verbose_name="چکیده انگلیسی",
+        null=True,
+        blank=True
+    )
+
     header_image=models.ImageField(
         upload_to="posts/headers/",
         verbose_name="تصویر"
@@ -32,6 +48,11 @@ class Post(GeneralModel):
         blank=True
     )
     
+    english_text= FroalaField(
+        verbose_name="متن انگلیسی",
+        null=True,
+        blank=True
+    )
 
     creator=models.ForeignKey(
         'accounts.User',

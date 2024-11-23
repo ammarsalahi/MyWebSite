@@ -10,13 +10,30 @@ class UserAbout(GeneralModel):
     description=models.TextField(
         verbose_name="توضیحات"
     )
+    english_description=models.TextField(
+        verbose_name="توضیحات انگلیسی",
+        blank=True,
+        null=True
+    )
     skill=models.CharField(
         verbose_name="مهارت",
-        max_length=200
+        max_length=500
+    )
+    english_skill=models.CharField(
+        verbose_name="مهارت انگلیسی",
+        max_length=500,
+         blank=True,
+        null=True
     )
     university_name=models.CharField(
         verbose_name="نام دانشگاه",
         max_length=300,
+    )
+    english_university_name=models.CharField(
+        verbose_name="نام دانشگاه انگلیسی",
+        max_length=300,
+         blank=True,
+        null=True
     )
     university_web=models.URLField(
         null=True,

@@ -15,6 +15,13 @@ class Project(GeneralModel):
         verbose_name="عنوان",
         max_length=200
     )
+
+    english_title = models.CharField(
+        verbose_name="عنوان انگلیسی",
+        max_length=200,
+        blank=True,
+        null=True
+    )
     header_image=models.ImageField(
         upload_to='projects/imgs/',
         verbose_name="تصویر نمایه"
@@ -26,6 +33,11 @@ class Project(GeneralModel):
     )
     text=models.TextField(
         verbose_name="متن",
+        null=True,
+        blank=True
+    )
+    english_text=models.TextField(
+        verbose_name="متن انگلیسی",
         null=True,
         blank=True
     )
