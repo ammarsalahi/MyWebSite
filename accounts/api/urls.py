@@ -10,7 +10,7 @@ router.register('users',UserViewset,basename='users')
 router.register('socials',SocialViewset,basename='socials')
 router.register('profiles',ProfileViewset,basename="profiles")
 router.register('cooperations',CooperationViewset,basename="cooperations")
-
+router.register('skills',SkillViewset,basename="skills")
 
 urlpatterns=router.urls
 

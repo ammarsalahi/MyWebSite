@@ -20,6 +20,11 @@ class SocialSerializer(serializers.ModelSerializer):
         model=Social
         fields='__all__'
 
+class SkillSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Skill
+        fields='__all__'
 class UserAboutSerializer(serializers.ModelSerializer):
     
     class Meta:
@@ -29,6 +34,7 @@ class UserAboutSerializer(serializers.ModelSerializer):
     def to_representation(self,instance):
         data = super(UserAboutSerializer, self).to_representation(instance)
         data['socials']=SocialSerializer(instance=instance.socials.all(),many=True).data
+        data['skills'] = SkillSerializer(instance=instance.skills.all(),many=True).data
         data['fullname']=instance.fullname
         data['user_img']=instance.user_img
         return data   

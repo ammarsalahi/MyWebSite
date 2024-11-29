@@ -47,7 +47,16 @@ class UserAbountViewset(ModelViewSet):
                 soci.status="Added"
                 soci.save()
             except Social.DoesNotExist:
-                pass    
+                pass  
+        skill_ids=data.get("skills")
+        for ski in skill_ids:
+            try:
+                skill=Skill.objects.get(id=int(ski))
+                about.skills.add(skill)
+                skill.status="Added"
+                skill.save()
+            except Skill.DoesNotExist:
+                pass      
         about.save()
         return Response(status=status.HTTP_201_CREATED)    
 
@@ -67,6 +76,15 @@ class UserAbountViewset(ModelViewSet):
             about.socials.add(social)
             social.status="Added"
             social.save()
+        skill_ids=data.get("skills")
+        for ski in skill_ids:
+            try:
+                skill=Skill.objects.get(id=int(ski))
+                about.skills.add(skill)
+                skill.status="Added"
+                skill.save()
+            except Skill.DoesNotExist:
+                pass     
         about.save()
         return Response(status=status.HTTP_201_CREATED)
 
@@ -74,6 +92,9 @@ class SocialViewset(ModelViewSet):
     queryset=Social.objects.all()
     serializer_class=SocialSerializer    
 
+class SkillViewset(ModelViewSet):
+    queryset=Skill.objects.all()
+    serializer_class=SkillSerializer  
 
 # class UserAboutShowView(APIView):
 #     def get(self,request,format=None):

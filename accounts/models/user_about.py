@@ -15,16 +15,7 @@ class UserAbout(GeneralModel):
         blank=True,
         null=True
     )
-    skill=models.CharField(
-        verbose_name="مهارت",
-        max_length=500
-    )
-    english_skill=models.CharField(
-        verbose_name="مهارت انگلیسی",
-        max_length=500,
-         blank=True,
-        null=True
-    )
+    
     university_name=models.CharField(
         verbose_name="نام دانشگاه",
         max_length=300,
@@ -39,6 +30,12 @@ class UserAbout(GeneralModel):
         null=True,
         blank=True,
         verbose_name="آدرس دانشگاه"
+    )
+    skills = models.ManyToManyField(
+        'accounts.Skill',
+        related_name="skill_about",
+        verbose_name="مهارت‌ها",
+        blank=True
     )
     socials=models.ManyToManyField(
         'accounts.Social',
