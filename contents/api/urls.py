@@ -9,7 +9,7 @@ router.register('categories',CategoryViewSet,basename='categories')
 router.register('projects',ProjectViewset,basename="projects")
 router.register('technologies',TechnologyViewset,basename='technologies')
 router.register('images',ImageViewset,basename='images')
-
+router.register("choices",ChoiceContentModelViewset,basename="choices")
 
 
 app_name="contents"
@@ -28,5 +28,6 @@ urlpatterns+=[
     path('search/',SearchView.as_view()),
     path('keywords-add/',KeywordAddView.as_view()),
     path('technologies/add/',TechnologyAddView.as_view()),
+    
     # path('posts-add/',AddPostView.as_view()),
 ]

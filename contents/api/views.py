@@ -401,3 +401,8 @@ class TechnologyAddView(APIView):
             return Response(
                 data=TechnologySerializer(instance=tech).data
             )  
+
+class ChoiceContentModelViewset(ModelViewSet):
+    queryset = ChoiceContent.objects.all()
+    serializer_class = ChoiceContentSerializer
+    

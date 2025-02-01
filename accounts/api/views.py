@@ -96,17 +96,17 @@ class SkillViewset(ModelViewSet):
     queryset=Skill.objects.all()
     serializer_class=SkillSerializer  
 
-# class UserAboutShowView(APIView):
-#     def get(self,request,format=None):
-#         try:
-#             user=User.objects.get(username='ammar')
-#             about=UserAbout.objects.get(user=user)
-#             return Response(
-#                 data=UserAboutSerializer(instance=about).data,
-#                 status=status.HTTP_200_OK
-#             )
-#         except (User.DoesNotExist,UserAbout.DoesNotExist):
-#             return Response(status=status.HTTP_404_NOT_FOUND)
+class UserAboutShowView(APIView):
+    def get(self,request,format=None):
+        try:
+            user=User.objects.get(is_superuser=true)[0]
+            about=UserAbout.objects.get(user=user)
+            return Response(
+                data=UserAboutSerializer(instance=about).data,
+                status=status.HTTP_200_OK
+            )
+        except (User.DoesNotExist,UserAbout.DoesNotExist):
+            return Response(status=status.HTTP_404_NOT_FOUND)
 
 class CooperationViewset(ModelViewSet):
     queryset=Cooperation.objects.all()

@@ -6,7 +6,5 @@ from .category import CategoryAdmin
 from .project import ProjectAdmin
 from .techology import TechnologyAdmin
 from .image import ImageAdmin
+from .choice import ChoiceContentAdmin
 
-# admin.site.register(Post,PostAdmin)
-# admin.site.register(Comment,CommentAdmin)
-# admin.site.register(Keyword,KeywordAdmin)

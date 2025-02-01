@@ -15,7 +15,7 @@ router.register('skills',SkillViewset,basename="skills")
 urlpatterns=router.urls
 
 urlpatterns+=[
-    # path('about/',UserAboutShowView.as_view()),
+    path('about/',UserAboutShowView.as_view()),
     path('signin/',UserSigninView.as_view()),
     path('change-password/',UserPasswordChangeView.as_view()),
     path('verify-password/',UserPasswordVerify.as_view()),

@@ -62,3 +62,14 @@ class ProjectSerializer(serializers.ModelSerializer):
         data['reading_time']=instance.reading_time
 
         return data    
+
+class ChoiceContentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model=ChoiceContent
+        fields="__all__"
+    def to_representation(self,instance):
+        data = super(ChoiceContentSerializer, self).to_representation(instance)
+        data['selected_post'] = PostSerializer(instance=Post.objects.get(id=instance.get_post_id)).data
+        return data
+
+    
