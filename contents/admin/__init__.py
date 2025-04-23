@@ -7,4 +7,4 @@ from .project import ProjectAdmin
 from .techology import TechnologyAdmin
 from .image import ImageAdmin
 from .choice import ChoiceContentAdmin
-
+from .telegram import TelegramAdmin

@@ -3,6 +3,9 @@ from rest_framework.routers import DefaultRouter
 from django.urls import path
 
 
+app_name="accounts"
+
+
 router=DefaultRouter()
 
 router.register('abouts',UserAbountViewset,basename='abouts')
@@ -11,6 +14,7 @@ router.register('socials',SocialViewset,basename='socials')
 router.register('profiles',ProfileViewset,basename="profiles")
 router.register('cooperations',CooperationViewset,basename="cooperations")
 router.register('skills',SkillViewset,basename="skills")
+
 
 urlpatterns=router.urls
 

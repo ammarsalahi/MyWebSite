@@ -14,6 +14,8 @@ from django.db.models import Q
 from .paginations import *
 from rest_framework.generics import GenericAPIView
 from rest_framework.filters import OrderingFilter
+from utils.versioning import WebBaseVersioning
+
 User=get_user_model()
 
 class PostViewSet(ModelViewSet):
@@ -23,6 +25,7 @@ class PostViewSet(ModelViewSet):
     filter_backends=[DjangoFilterBackend]
     filterset_class=PostFilter
     pagination_class=ContentPagination
+    versioning_class = WebBaseVersioning
     # ordering_fields=['created_at']
     # ordering=['created_at']
 
@@ -84,11 +87,15 @@ class PostViewSet(ModelViewSet):
 class KeywordViewSet(ModelViewSet):
     queryset=Keyword.objects.all()
     serializer_class=KeywordSerializer
+    versioning_class = WebBaseVersioning
+    
 
 class CategoryViewSet(ModelViewSet):
     queryset=Category.objects.all()
     serializer_class=CategorySerializer
     pagination_class=CategoryPagination
+    versioning_class = WebBaseVersioning
+    
 
 
 class ProjectViewset(ModelViewSet):
@@ -98,6 +105,8 @@ class ProjectViewset(ModelViewSet):
     filter_backends=[DjangoFilterBackend]
     filterset_class=ProjectFilter 
     pagination_class=ContentPagination
+    versioning_class = WebBaseVersioning
+    
     # ordering_fields=['created_at']
     # ordering=['created_at']
 
@@ -167,14 +176,19 @@ class ProjectViewset(ModelViewSet):
 class TechnologyViewset(ModelViewSet):
     queryset=Technology.objects.all()
     serializer_class=TechnologySerializer
+    versioning_class = WebBaseVersioning
+    
 
 class ImageViewset(ModelViewSet):
     queryset=Image.objects.all()
     serializer_class=ImageSerializer
+    versioning_class = WebBaseVersioning
 
 
 
 class HomeView(APIView):
+    versioning_class = WebBaseVersioning
+    
     def get(self,request,format=None):
         data={
             'posts':PostSerializer(instance=Post.objects.all().order_by('-created_at')[:8],many=True).data,
@@ -195,6 +209,8 @@ class HomeView(APIView):
 
 
 class PostFullDetailView(APIView):
+    versioning_class = WebBaseVersioning
+    
     def get(self,request,id,format=None):
         try:
             post=get_object_or_404(Post,post_id=id)
@@ -207,6 +223,8 @@ class PostFullDetailView(APIView):
             return Response(status=status.HTTP_404_NOT_FOUND)
 
 class ProjectFullDetailView(APIView):
+    versioning_class = WebBaseVersioning
+    
     def get(self,request,id,format=None):
         try:
             project=get_object_or_404(Project,project_id=id)
@@ -222,8 +240,12 @@ class ProjectFullDetailView(APIView):
 class newPostsView(ListAPIView):
     queryset=Post.objects.all()
     serializer_class=PostSerializer
+    versioning_class = WebBaseVersioning
+    
 
 class FooterView(APIView):
+    versioning_class = WebBaseVersioning
+    
     def get(self,request,format=None):
         data={
             'categories':CategorySerializer(instance=Category.objects.all(),many=True).data,
@@ -235,6 +257,7 @@ class FooterView(APIView):
 class CategoryPostView(GenericAPIView):
     pagination_class = ContentPagination
     serializer_class = PostSerializer
+    versioning_class = WebBaseVersioning
 
     def get_queryset(self):
         name = self.kwargs['name']
@@ -260,6 +283,7 @@ class CategoryPostView(GenericAPIView):
 class KeywordPostView(GenericAPIView):
     pagination_class=ContentPagination
     serializer_class=PostSerializer
+    versioning_class = WebBaseVersioning
 
     def get_queryset(self):
         name = self.kwargs['name']
@@ -287,6 +311,8 @@ class KeywordPostView(GenericAPIView):
 class TechnologyProjectView(GenericAPIView):
     pagination_class=ContentPagination
     serializer_class=ProjectSerializer
+    versioning_class = WebBaseVersioning
+    
     def get_queryset(self):
         name = self.kwargs['name']
         try:
@@ -312,6 +338,8 @@ class TechnologyProjectView(GenericAPIView):
 
 
 class SearchView(APIView):
+    versioning_class = WebBaseVersioning
+    
     def filterTwoModel(self,query:str)-> tuple:
         posts=Post.objects.filter(
             Q(title__icontains=query)|
@@ -371,6 +399,8 @@ class SearchView(APIView):
                 return Response(status=status.HTTP_404_NOT_FOUND)    
  
 class KeywordAddView(APIView):
+    versioning_class = WebBaseVersioning
+    
     def post(self,request,format=None):
         name=request.data.get('name')
         try:
@@ -387,6 +417,8 @@ class KeywordAddView(APIView):
             )  
 
 class TechnologyAddView(APIView):
+    versioning_class = WebBaseVersioning
+    
     def post(self,request,format=None):
         name=request.data.get('name')
         try:
@@ -405,4 +437,12 @@ class TechnologyAddView(APIView):
 class ChoiceContentModelViewset(ModelViewSet):
     queryset = ChoiceContent.objects.all()
     serializer_class = ChoiceContentSerializer
+    versioning_class = WebBaseVersioning
+    
+    
+
+class TelegramModelViewset(ModelViewSet):
+    queryset = TelegramChannel.objects.all()
+    serializer_class = TelegramSerializer    
+    versioning_class = WebBaseVersioning
     

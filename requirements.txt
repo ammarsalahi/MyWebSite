@@ -13,3 +13,5 @@ pyotp==2.9.0
 python-dotenv==1.0.1
 qrcode==8.0
 sqlparse==0.5.1
+django-unfold==0.55.3 
+drf-yasg==1.21.10 

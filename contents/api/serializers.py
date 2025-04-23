@@ -2,10 +2,6 @@ from rest_framework import serializers
 from contents.models import *
 
 
-
-
-
-
 class KeywordSerializer(serializers.ModelSerializer):
     class Meta:
         model=Keyword
@@ -72,4 +68,8 @@ class ChoiceContentSerializer(serializers.ModelSerializer):
         data['selected_post'] = PostSerializer(instance=Post.objects.get(id=instance.get_post_id)).data
         return data
 
+class TelegramSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = TelegramChannel
+        fields = "__all__"
     

@@ -1,6 +1,11 @@
 from rest_framework.routers import DefaultRouter
 from .views import *
 from django.urls import path
+
+
+app_name="contents"
+
+
 router=DefaultRouter()
 
 router.register('posts',PostViewSet,basename='posts')
@@ -10,9 +15,8 @@ router.register('projects',ProjectViewset,basename="projects")
 router.register('technologies',TechnologyViewset,basename='technologies')
 router.register('images',ImageViewset,basename='images')
 router.register("choices",ChoiceContentModelViewset,basename="choices")
+router.register("telegrams",TelegramModelViewset,basename="telegrams")
 
-
-app_name="contents"
 
 urlpatterns=router.urls
 

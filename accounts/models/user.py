@@ -1,6 +1,7 @@
 from django.contrib.auth.base_user import AbstractBaseUser
 from django.db import models
 from .user_manager import UserManager
+from django.utils.translation import gettext_lazy as _
 
 
 def get_default_image():
@@ -9,20 +10,20 @@ def get_default_image():
 class User(AbstractBaseUser):
     first_name = models.CharField(
         max_length=300,
-        verbose_name="نام",
+        verbose_name=_("first name"),
         null=True,
         blank=True
     )
     last_name = models.CharField(
         max_length=300,
-        verbose_name="نام خانوادگی",
+        verbose_name=_("last name"),
         null=True,
         blank=True
 
     )
     username = models.CharField(
         max_length=200,
-        verbose_name="نام کاربری",
+        verbose_name=_("username"),
         unique=True
     )
     email = models.EmailField(
@@ -42,6 +43,8 @@ class User(AbstractBaseUser):
     )
     is_staff = models.BooleanField(
         default=False,
+        verbose_name="کارمند است؟"
+
     )
     is_active = models.BooleanField(
         default=False,

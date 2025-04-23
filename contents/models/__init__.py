@@ -5,3 +5,4 @@ from .project import Project
 from .technology import Technology
 from .category import Category
 from .choice import ChoiceContent
+from .telegram import TelegramChannel
