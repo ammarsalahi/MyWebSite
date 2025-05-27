@@ -187,31 +187,34 @@ class ImageViewset(ModelViewSet):
 
 
 class HomeView(APIView):
-    versioning_class = WebBaseVersioning
-    
-    def get(self,request,format=None):
+    # versioning_class = WebBaseVersioning
+
+    def get(self,request,*args, **kwargs):
+        version = kwargs.get('version', None)
+
         data={
             'posts':PostSerializer(instance=Post.objects.all().order_by('-created_at')[:8],many=True).data,
             'projects':ProjectSerializer(instance=Project.objects.all()[:8],many=True).data,
             # 'categories':CategorySerializer(instance=Category.objects.all(),many=True).data,
             # 'teches':TechnologySerializer(instance=Technology.objects.all(),many=True).data
         }
-        try:
-            user=get_object_or_404(User,username="ammar")
-            data['userimg']=request.build_absolute_uri(user.profile_image.url)
-        except User.DoesNotExist:
-            pass    
+        # try:
+        #     user=get_object_or_404(User,username="ammar")
+        #     data['userimg']=request.build_absolute_uri(user.profile_image.url)
+        # except User.DoesNotExist:
+        #     pass    
         return Response(
-            data=data,
+            data={},
             status=status.HTTP_200_OK
         )
 
 
 
 class PostFullDetailView(APIView):
-    versioning_class = WebBaseVersioning
     
-    def get(self,request,id,format=None):
+    def get(self,request,id,*args, **kwargs):
+        version = kwargs.get('version', None)
+
         try:
             post=get_object_or_404(Post,post_id=id)
             data={
@@ -223,9 +226,11 @@ class PostFullDetailView(APIView):
             return Response(status=status.HTTP_404_NOT_FOUND)
 
 class ProjectFullDetailView(APIView):
-    versioning_class = WebBaseVersioning
+    # versioning_class = WebBaseVersioning
     
-    def get(self,request,id,format=None):
+    def get(self,request,id,*args, **kwargs):
+        version = kwargs.get('version', None)
+
         try:
             project=get_object_or_404(Project,project_id=id)
             data={
@@ -244,9 +249,11 @@ class newPostsView(ListAPIView):
     
 
 class FooterView(APIView):
-    versioning_class = WebBaseVersioning
+    # versioning_class = WebBaseVersioning
     
-    def get(self,request,format=None):
+    def get(self,request,*args, **kwargs):
+        version = kwargs.get('version', None)
+
         data={
             'categories':CategorySerializer(instance=Category.objects.all(),many=True).data,
             'teches':TechnologySerializer(instance=Technology.objects.all(),many=True).data
@@ -266,8 +273,9 @@ class CategoryPostView(GenericAPIView):
             return Category.objects.get(english_name=name).post_set.all()
         except Category.DoesNotExist:
             return []
-    def get(self, request, name, format=None):
-        print(name)
+    def get(self, request, name, *args, **kwargs):
+        version = kwargs.get('version', None)
+
         try:
             queryset = Category.objects.get(english_name=name).post_set.all()
             page = self.paginate_queryset(queryset)
@@ -293,7 +301,9 @@ class KeywordPostView(GenericAPIView):
         except Keyword.DoesNotExist:
             return []
         
-    def get(self,request,name,format=None):
+    def get(self,request,name,*args, **kwargs):
+        version = kwargs.get('version', None)
+
         try:
             keywords=Keyword.objects.filter(english_name=name)
             queryset=Post.objects.filter(keywords__in=keywords)
@@ -321,7 +331,9 @@ class TechnologyProjectView(GenericAPIView):
         except Technology.DoesNotExist:
             return []
         
-    def get(self,request,name,format=None):
+    def get(self,request,name,*args, **kwargs):
+        version = kwargs.get('version', None)
+
         try:
             teches=Technology.objects.filter(english_name=name)
             queryset=Project.objects.filter(technologies__in=teches)
@@ -385,7 +397,9 @@ class SearchView(APIView):
             'persian_date':obj.project_date,
             'reading_time':obj.reading_time,
         }
-    def get(self,request,format=None):
+    def get(self,request,*args, **kwargs):
+        version = kwargs.get('version', None)
+
         q=request.GET.get('q')
         if q is not None:
             try:
@@ -399,9 +413,11 @@ class SearchView(APIView):
                 return Response(status=status.HTTP_404_NOT_FOUND)    
  
 class KeywordAddView(APIView):
-    versioning_class = WebBaseVersioning
+    # versioning_class = WebBaseVersioning
     
-    def post(self,request,format=None):
+    def post(self,request,*args, **kwargs):
+        version = kwargs.get('version', None)
+
         name=request.data.get('name')
         try:
             key=Keyword.objects.get(name=name)
@@ -417,9 +433,11 @@ class KeywordAddView(APIView):
             )  
 
 class TechnologyAddView(APIView):
-    versioning_class = WebBaseVersioning
+    # versioning_class = WebBaseVersioning
     
-    def post(self,request,format=None):
+    def post(self,request,*args, **kwargs):
+        version = kwargs.get('version', None)
+
         name=request.data.get('name')
         try:
             tech=Technology.object.get(name=name)
